@@ -1,5 +1,6 @@
 ﻿## OneForAll-OA智能人事
-帮助开发人员快速构建Web后台管理系统常见OA功能服务
+帮助开发人员快速构建Web后台管理系统常见OA功能服务<br/>
+主项目传送门：https://github.com/514933266/OneForAll.Web
 
 ### 一、设置
 #### 职级管理
