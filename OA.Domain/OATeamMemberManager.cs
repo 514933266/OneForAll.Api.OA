@@ -256,7 +256,7 @@ namespace OA.Domain
                 return BaseErrType.DataEmpty;
 
             var ids = new List<Guid>() { teamId, targetTeamId };
-            var teams = await _teamRepository.GetListAsync(ids);
+            var teams = await _teamRepository.GetListANTAsync(ids);
             var team = teams.FirstOrDefault(w => w.Id == teamId);
             var target = teams.FirstOrDefault(w => w.Id == targetTeamId);
             if (target == null || team == null)
@@ -305,7 +305,7 @@ namespace OA.Domain
             }
 
             var idcards = data.Select(s => s.IdCard).ToList();
-            var teams = await _teamRepository.GetListValidAsync();
+            var teams = await _teamRepository.GetListValidANTAsync();
             var existsPersons = await _personReposiotry.GetListByIdCardAsync(idcards);
             var teamTree = _mapper.Map<IEnumerable<OATeam>, IEnumerable<OATeamTreeAggr>>(teams);
 

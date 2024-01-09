@@ -19,5 +19,12 @@ namespace OA.Domain.Repositorys
         /// <param name="ids">实体id</param>
         /// <returns>人员列表</returns>
         Task<IEnumerable<OAPersonalSchedule>> GetListAsync(IEnumerable<Guid> ids);
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="date">通知时间</param>
+        /// <returns>人员列表</returns>
+        Task<IEnumerable<OAPersonalSchedule>> GetListIQFAsync(DateTime date);
     }
 }

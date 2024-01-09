@@ -52,7 +52,7 @@ namespace OA.Domain
         public async Task<IEnumerable<OATeamTreeAggr>> GetListAsync(Guid parentId, string type, bool deep, OATeamSearchScopeEnum scope)
         {
             var id = deep ? Guid.Empty : parentId;
-            var data = await _repository.GetListAsync(Guid.Empty, type, scope) as List<OATeam>;
+            var data = await _repository.GetListANTAsync(Guid.Empty, type, scope) as List<OATeam>;
 
             var leaderIds = data.Select(s => s.LeaderId).ToList();
             var leaders = await _personRepository.GetListAsync(leaderIds);
@@ -119,7 +119,7 @@ namespace OA.Domain
         /// <returns>结果</returns>
         public async Task<BaseErrType> AddAsync(OATeamForm entity)
         {
-            var teams = await _repository.GetListValidAsync();
+            var teams = await _repository.GetListValidANTAsync();
             var data = _mapper.Map<OATeamForm, OATeam>(entity);
             data.CreateTime = DateTime.Now;
             data.CreatorId = LoginUser.Id;
@@ -150,7 +150,7 @@ namespace OA.Domain
         /// <returns>结果</returns>
         public async Task<BaseErrType> UpdateAsync(OATeamForm entity)
         {
-            var teams = await _repository.GetListValidAsync();
+            var teams = await _repository.GetListAsync();
             var data = teams.FirstOrDefault(w => w.Id == entity.Id);
             if (data == null) return BaseErrType.DataError;
 
@@ -212,7 +212,7 @@ namespace OA.Domain
         public async Task<BaseErrType> SortAsync(IEnumerable<OATeamSortForm> entities)
         {
             var ids = entities.Select(s => s.Id);
-            var data = await _repository.GetListAsync(ids);
+            var data = await _repository.GetListANTAsync(ids);
             if (data == null) return BaseErrType.DataNotFound;
 
             var index = 0;

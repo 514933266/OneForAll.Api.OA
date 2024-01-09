@@ -21,13 +21,13 @@ namespace OA.Domain.Repositorys
         /// </summary>
         /// <param name="ids">上级id</param>
         /// <returns>团队列表</returns>
-        Task<IEnumerable<OATeam>> GetListAsync(IEnumerable<Guid> ids);
+        Task<IEnumerable<OATeam>> GetListANTAsync(IEnumerable<Guid> ids);
 
         /// <summary>
         /// 查询列表（未删除）
         /// </summary>
         /// <returns>团队列表</returns>
-        Task<IEnumerable<OATeam>> GetListValidAsync();
+        Task<IEnumerable<OATeam>> GetListValidANTAsync();
 
         /// <summary>
         /// 查询列表
@@ -36,7 +36,7 @@ namespace OA.Domain.Repositorys
         /// <param name="type">类型</param>
         /// <param name="scope">范围 -1全部 0有效 1被删除数据</param>
         /// <returns>团队列表</returns>
-        Task<IEnumerable<OATeam>> GetListAsync(Guid parentId, string type, OATeamSearchScopeEnum scope);
+        Task<IEnumerable<OATeam>> GetListANTAsync(Guid parentId, string type, OATeamSearchScopeEnum scope);
 
         #endregion
 

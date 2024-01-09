@@ -155,7 +155,7 @@ namespace OA.Domain
 
             data.InitExtendInfomation(entity.ExtendInformations);
 
-            var teams = await _teamRepository.GetListValidAsync();
+            var teams = await _teamRepository.GetListValidANTAsync();
             var contacts = await _contactRepository.GetListAsync(w => w.OAPersonId == data.Id);
             if (contacts.Any())
             {
@@ -186,7 +186,7 @@ namespace OA.Domain
             _mapper.Map(entity, data);
 
             data.InitExtendInfomation(entity.ExtendInformations);
-            var teams = await _teamRepository.GetListValidAsync();
+            var teams = await _teamRepository.GetListValidANTAsync();
             var contacts = await _contactRepository.GetListAsync(w => w.OAPersonId == data.Id);
             if (contacts.Any())
             {

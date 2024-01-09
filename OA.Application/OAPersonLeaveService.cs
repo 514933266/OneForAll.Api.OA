@@ -133,7 +133,7 @@ namespace OA.Application
                 {
                     var memberIds = members.Select(s => s.Id).ToList();
                     var teamIds = members.Select(s => s.OATeamId).ToList();
-                    var teams = await _teamRepository.GetListAsync(teamIds);
+                    var teams = await _teamRepository.GetListANTAsync(teamIds);
                     members.ForEach(e =>
                     {
                         var team = teams.FirstOrDefault(w => w.Id == e.OATeamId);

@@ -68,7 +68,7 @@ namespace OA.Application
             {
                 var teamIds = new List<Guid>();
                 var groupIds = new List<Guid>();
-                var teams = await _teamRepository.GetListValidAsync();
+                var teams = await _teamRepository.GetListValidANTAsync();
                 var tids = contacts.Where(w => w.IsLeader).Select(s => s.OATeamId).ToList();
                 var gids = contacts.Where(w => !w.IsLeader).Select(s => s.OATeamId).ToList();
                 tids.ForEach(e =>

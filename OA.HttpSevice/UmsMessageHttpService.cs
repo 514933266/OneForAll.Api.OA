@@ -60,7 +60,7 @@ namespace OA.HttpService
             if (client == null)
                 throw new Exception("客户端配置异常");
 
-            var response = await client.PostAsync(client.BaseAddress + "/WechatGzh/Template", request, new JsonMediaTypeFormatter());
+            var response = await client.PostAsync(client.BaseAddress, request, new JsonMediaTypeFormatter());
             return await response.Content.ReadFromJsonAsync<BaseMessage>();
         }
     }

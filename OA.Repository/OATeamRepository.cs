@@ -33,7 +33,7 @@ namespace OA.Repository
         /// </summary>
         /// <param name="ids">上级id</param>
         /// <returns>团队列表</returns>
-        public async Task<IEnumerable<OATeam>> GetListAsync(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<OATeam>> GetListANTAsync(IEnumerable<Guid> ids)
         {
             var predicate = PredicateBuilder.Create<OATeam>(w => ids.Contains(w.Id));
 
@@ -47,7 +47,7 @@ namespace OA.Repository
         /// 查询列表（未删除）
         /// </summary>
         /// <returns>团队列表</returns>
-        public async Task<IEnumerable<OATeam>> GetListValidAsync()
+        public async Task<IEnumerable<OATeam>> GetListValidANTAsync()
         {
             return await DbSet
                 .AsNoTracking()
@@ -62,7 +62,7 @@ namespace OA.Repository
         /// <param name="type">类型</param>
         /// <param name="scope">范围 -1全部 0有效 1被删除数据</param>
         /// <returns>团队列表</returns>
-        public async Task<IEnumerable<OATeam>> GetListAsync(Guid parentId, string type, OATeamSearchScopeEnum scope)
+        public async Task<IEnumerable<OATeam>> GetListANTAsync(Guid parentId, string type, OATeamSearchScopeEnum scope)
         {
             var predicate = PredicateBuilder.Create<OATeam>(w => true);
             if (!type.IsNullOrEmpty()) predicate = predicate.And(w => w.Type == type);

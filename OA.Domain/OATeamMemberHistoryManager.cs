@@ -104,7 +104,7 @@ namespace OA.Domain
         {
             var teamIds = new List<Guid>() { form.TeamId, form.TargetTeamId };
 
-            var teams = await _teamRepository.GetListAsync(teamIds);
+            var teams = await _teamRepository.GetListANTAsync(teamIds);
             var team = teams.FirstOrDefault(w => w.Id == form.TeamId);
             var targetTeam = teams.FirstOrDefault(w => w.Id == form.TargetTeamId);
 
@@ -148,7 +148,7 @@ namespace OA.Domain
         {
             var teamIds = new List<Guid>() { form.TeamId };
 
-            var teams = await _teamRepository.GetListAsync(teamIds);
+            var teams = await _teamRepository.GetListANTAsync(teamIds);
             var team = teams.FirstOrDefault(w => w.Id == form.TeamId);
 
             if (team == null)

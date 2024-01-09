@@ -85,7 +85,7 @@ namespace OA.Domain
 
                 _mapper.Map(form, data);
                 data.CalculateNotifyTime();
-                return await ResultAsync(() => _repository.AddAsync(data));
+                return await ResultAsync(() => _repository.UpdateAsync(data));
             }
         }
 

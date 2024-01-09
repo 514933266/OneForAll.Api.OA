@@ -238,7 +238,7 @@ namespace OA.Domain.AggregateRoots
                 if (employeeStatus != null) EmployeeStatus = employeeStatus.Value;
                 if (entryDate != null) EntryDate = entryDate.Value.IsNullOrEmpty() ? null : entryDate.Value.TryDateTime();
                 if (leaveDate != null) LeaveDate = leaveDate.Value.IsNullOrEmpty() ? null : leaveDate.Value.TryDateTime();
-                if (actualEntryDate != null && actualEntryDate.Value.IsNullOrEmpty()) actualEntryDate.Value = EntryDate.Value.ToString();
+                if (actualEntryDate != null && actualEntryDate.Value.IsNullOrEmpty()) actualEntryDate.Value = EntryDate.HasValue ? EntryDate.Value.ToString() : "";
 
                 #endregion
 

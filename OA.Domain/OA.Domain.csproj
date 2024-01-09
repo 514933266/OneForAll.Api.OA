@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="OneForAll.Core" Version="1.2.0.4" />
-    <PackageReference Include="OneForAll.EFCore" Version="1.2.2.6" />
-    <PackageReference Include="OneForAll.File" Version="1.2.0" />
+    <PackageReference Include="OneForAll.Core" Version="2.0.0-net8" />
+    <PackageReference Include="OneForAll.EFCore" Version="2.0.1" />
+    <PackageReference Include="OneForAll.File" Version="2.0.1" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
