@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using OA.Application.Dtos;
 using OA.Application.Interfaces;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Interfaces;
+using OA.Domain.Models;
 using OneForAll.Core;
 
 namespace OA.Application
@@ -38,6 +40,16 @@ namespace OA.Application
         {
             var data = await _manager.GetListAsync(name);
             return _mapper.Map<IEnumerable<OATeamType>, IEnumerable<OATeamTypeDto>>(data);
+        }
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="form">表单</param>
+        /// <returns></returns>
+        public async Task<BaseErrType> AddAsync(OATeamTypeForm form)
+        {
+            return await _manager.AddAsync(form);
         }
 
         /// <summary>

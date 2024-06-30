@@ -16,6 +16,7 @@ using OA.Domain.AggregateRoots;
 using OA.Application.Interfaces;
 using OneForAll.Core.Extension;
 using System.Security.Policy;
+using OA.Domain;
 
 namespace OA.Application
 {
@@ -26,12 +27,15 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonManager _manager;
+        private readonly IOATeamMemberManager _memberManager;
         public OAPersonService(
             IMapper mapper,
-            IOAPersonManager personManager)
+            IOAPersonManager personManager,
+            IOATeamMemberManager memberManager)
         {
             _mapper = mapper;
             _manager = personManager;
+            _memberManager = memberManager;
         }
 
         /// <summary>
@@ -82,9 +86,9 @@ namespace OA.Application
             return new OAPersonStatisticDto()
             {
                 TotalOnJobCount = data.Count(),
-                NormalCount = data.Where(w => w.EmployeeType == "全职").Count(),
-                InternCount = data.Where(w => w.EmployeeType == "兼职").Count(),
-                TrialCount = data.Where(w => w.EmployeeStatus == "实习生").Count(),
+                NormalCount = data.Where(w => w.EmployeeStatus == "正式员工").Count(),
+                InternCount = data.Where(w => w.EmployeeType == "实习生").Count(),
+                TrialCount = data.Where(w => w.EmployeeStatus == "试用员工").Count(),
             };
         }
 
@@ -115,7 +119,13 @@ namespace OA.Application
         /// <returns>结果</returns>
         public async Task<BaseErrType> DeleteAsync(IEnumerable<Guid> ids)
         {
-            return await _manager.DeleteAsync(ids);
+            var errType = await _manager.DeleteAsync(ids);
+            if (errType == BaseErrType.Success)
+            {
+                // 移除部门成员关系
+                await _memberManager.RemoveFileAsync(ids);
+            }
+            return errType;
         }
 
         /// <summary>
@@ -158,12 +168,20 @@ namespace OA.Application
         /// <param name="employeeStatus">员工状态</param>
         /// <param name="employeeType">员工类型</param>
         /// <param name="fields">选择导出字段</param>
+        /// <param name="jobs">岗位职级</param>
         /// <param name="startEntryDate">开始入职时间</param>
         /// <param name="endEntryDate">结束入职时间</param>
         /// <returns>文件流</returns>
-        public async Task<byte[]> ExportExcelAsync(OAPersonOnJobStatusEnum onJobStatus, string employeeType, string employeeStatus, IEnumerable<string> fields, DateTime? startEntryDate, DateTime? endEntryDate)
+        public async Task<byte[]> ExportExcelAsync(
+            OAPersonOnJobStatusEnum onJobStatus,
+            string employeeType,
+            string employeeStatus,
+            IEnumerable<string> fields,
+            IEnumerable<string> jobs,
+            DateTime? startEntryDate,
+            DateTime? endEntryDate)
         {
-            return await _manager.ExportExcelAsync(onJobStatus, employeeType, employeeStatus, fields, startEntryDate, endEntryDate);
+            return await _manager.ExportExcelAsync(onJobStatus, employeeType, employeeStatus, fields, jobs, startEntryDate, endEntryDate);
         }
 
         /// <summary>

@@ -90,6 +90,7 @@ namespace OA.Repository
         /// <param name="onJobStatus">类型 -1全部 0在职 1离职</param>
         /// <param name="employeeStatus">员工状态</param>
         /// <param name="employeeType">员工类型</param>
+        /// <param name="jobs">职级</param>
         /// <param name="startEntryDate">开始入职时间</param>
         /// <param name="endEntryDate">结束入职时间</param>
         /// <returns>列表</returns>
@@ -97,6 +98,7 @@ namespace OA.Repository
             OAPersonOnJobStatusEnum onJobStatus,
             string employeeType,
             string employeeStatus,
+            IEnumerable<string> jobs,
             DateTime? startEntryDate,
             DateTime? endEntryDate)
         {
@@ -105,6 +107,7 @@ namespace OA.Repository
             if (!employeeStatus.IsNullOrEmpty()) predicate = predicate.And(w => w.EmployeeStatus.Contains(employeeType));
             if (startEntryDate != null) predicate = predicate.And(w => w.EntryDate >= startEntryDate);
             if (endEntryDate != null) predicate = predicate.And(w => w.EntryDate <= endEntryDate);
+            if (jobs.Any()) predicate = predicate.And(w => jobs.Contains(w.Job));
 
             switch (onJobStatus)
             {
@@ -112,9 +115,7 @@ namespace OA.Repository
                 case OAPersonOnJobStatusEnum.Leave: predicate = predicate.And(w => w.LeaveDate != null); break;
             }
 
-            return await DbSet
-                .Where(predicate)
-                .ToListAsync();
+            return await DbSet.Where(predicate).ToListAsync();
         }
 
         /// <summary>

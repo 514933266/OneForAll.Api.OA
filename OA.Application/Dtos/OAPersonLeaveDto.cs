@@ -49,7 +49,7 @@ namespace OA.Application.Dtos
         /// <summary>
         /// 离职原因
         /// </summary>
-        public string Reason { get; set; }
+        public List<string> Reasons { get; set; }
 
         /// <summary>
         /// 备注
@@ -64,7 +64,7 @@ namespace OA.Application.Dtos
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreateTime { get; set; } = DateTime.Now;
+        public DateTime CreateTime { get; set; }
 
     }
 }

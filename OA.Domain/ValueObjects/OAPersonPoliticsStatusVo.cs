@@ -19,10 +19,6 @@ namespace OA.Domain.ValueObjects
             Name = "PoliticsStatus";
             Text = "政治面貌";
             Placeholder = "请选择政治面貌";
-            IsDefault = false;
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "群众";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -32,10 +28,17 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "群众", Value = "群众" },
                 new OAPersonDefaultSelectVo() { Name = "其他", Value = "其他" }
             }.ToJson();
+            IsDefault = true;
+            IsRequired = true;
+            IsEnableType = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEntryFileVisiable = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableAddTypeDetail = true;
         }
     }
 }

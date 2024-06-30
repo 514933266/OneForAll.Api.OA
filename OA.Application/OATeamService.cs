@@ -40,8 +40,6 @@ namespace OA.Application
             _teamMemberManager = teamMemberManager;
         }
 
-        #region 团队
-
         /// <summary>
         /// 获取列表树
         /// </summary>
@@ -134,26 +132,11 @@ namespace OA.Application
         /// <summary>
         /// 批量排序
         /// </summary>
-        /// <param name="entities">排序表单</param>
+        /// <param name="ids">排序表单</param>
         /// <returns>结果</returns>
-        public async Task<BaseErrType> SortAsync(IEnumerable<OATeamSortForm> entities)
+        public async Task<BaseErrType> SortAsync(IEnumerable<Guid> ids)
         {
-            return await _manager.SortAsync(entities);
-        }
-
-        #endregion
-
-        #region 成员
-
-        /// <summary>
-        /// 获取成员列表
-        /// </summary>
-        /// <param name="id">团队id</param>
-        /// <returns>列表</returns>
-        public async Task<IEnumerable<OATeamMemberDto>> GetListMemberAsync(Guid id)
-        {
-            var data = await _teamMemberManager.GetListAsync(id, false);
-            return _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OATeamMemberDto>>(data);
+            return await _manager.SortAsync(ids);
         }
 
         /// <summary>
@@ -166,29 +149,5 @@ namespace OA.Application
         {
             return await _teamMemberManager.AddAsync(id, personIds);
         }
-
-        /// <summary>
-        /// 删除成员（批量）
-        /// </summary>
-        /// <param name="id">部门id</param>
-        /// <param name="personIds">关联id集合</param>
-        /// <returns>结果</returns>
-        public async Task<BaseErrType> DeleteMemberAsync(Guid id, IEnumerable<Guid> personIds)
-        {
-            return await _teamMemberManager.DeleteAsync(id, personIds);
-        }
-
-        /// <summary>
-        /// 导入Excel
-        /// </summary>
-        /// <param name="id">部门id</param>
-        /// <param name="data">表单</param>
-        /// <returns>结果</returns>
-        public async Task<BaseMessage> ImportMemberExcelAsync(Guid id, IEnumerable<OATeamMemberImportForm> data)
-        {
-            return await _teamMemberManager.ImportExcelAsync(id, data);
-        }
-
-        #endregion
     }
 }

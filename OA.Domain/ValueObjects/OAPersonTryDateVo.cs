@@ -17,9 +17,6 @@ namespace OA.Domain.ValueObjects
             Name = "TryDate";
             Text = "试用期";
             Placeholder = "请选择试用期";
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.Select;
             Value = "无";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -30,10 +27,13 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "6个月", Value = "6个月" },
                 new OAPersonDefaultSelectVo() { Name = "其他", Value = "其他" }
             }.ToJson();
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEnableType = true;
+            IsEnableRequired = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableAddTypeDetail = true;
         }
     }
 }

@@ -16,15 +16,16 @@ namespace OA.Domain.ValueObjects
             Name = "DegreeFile";
             Text = "学位证书";
             Placeholder = "请上传学位证书";
-            IsDefault = false;
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.File;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

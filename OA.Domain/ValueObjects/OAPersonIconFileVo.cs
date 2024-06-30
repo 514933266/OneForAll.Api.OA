@@ -16,15 +16,16 @@ namespace OA.Domain.ValueObjects
             Name = "IconFile";
             Text = "员工照片";
             Placeholder = "请上传员工照片";
-            IsDefault = false;
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.File;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

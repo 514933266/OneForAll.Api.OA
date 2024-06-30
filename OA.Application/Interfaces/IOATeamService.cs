@@ -14,8 +14,6 @@ namespace OA.Application.Interfaces
     /// </summary>
     public interface IOATeamService
     {
-        #region 组织
-
         /// <summary>
         /// 获取列表树
         /// </summary>
@@ -24,11 +22,7 @@ namespace OA.Application.Interfaces
         /// <param name="deep">是否深度检索</param>
         /// <param name="scope">范围 -1全部 0有效 1被删除数据</param>
         /// <returns>列表</returns>
-        Task<IEnumerable<OATeamTreeDto>> GetListAsync(
-            Guid parentId,
-            string type,
-            bool deep,
-            OATeamSearchScopeEnum scope);
+        Task<IEnumerable<OATeamTreeDto>> GetListAsync(Guid parentId, string type, bool deep, OATeamSearchScopeEnum scope);
 
         /// <summary>
         /// 获取指定组织
@@ -62,20 +56,9 @@ namespace OA.Application.Interfaces
         /// <summary>
         /// 批量排序
         /// </summary>
-        /// <param name="entities">排序表单</param>
+        /// <param name="ids">排序表单</param>
         /// <returns>结果</returns>
-        Task<BaseErrType> SortAsync(IEnumerable<OATeamSortForm> entities);
-
-        #endregion
-
-        #region 成员
-
-        /// <summary>
-        /// 获取成员列表
-        /// </summary>
-        /// <param name="id">组织id</param>
-        /// <returns>列表</returns>
-        Task<IEnumerable<OATeamMemberDto>> GetListMemberAsync(Guid id);
+        Task<BaseErrType> SortAsync(IEnumerable<Guid> ids);
 
         /// <summary>
         /// 添加成员
@@ -84,23 +67,5 @@ namespace OA.Application.Interfaces
         /// <param name="personIds">人员id</param>
         /// <returns>结果</returns>
         Task<BaseErrType> AddMemberAsync(Guid id, IEnumerable<Guid> personIds);
-
-        /// <summary>
-        /// 删除成员（批量）
-        /// </summary>
-        /// <param name="id">组织id</param>
-        /// <param name="contactIds">关联id</param>
-        /// <returns>结果</returns>
-        Task<BaseErrType> DeleteMemberAsync(Guid id, IEnumerable<Guid> contactIds);
-
-        /// <summary>
-        /// 导入Excel
-        /// </summary>
-        /// <param name="id">部门id</param>
-        /// <param name="data">表单</param>
-        /// <returns>结果</returns>
-        Task<BaseMessage> ImportMemberExcelAsync(Guid id, IEnumerable<OATeamMemberImportForm> data);
-
-        #endregion
     }
 }

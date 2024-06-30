@@ -17,13 +17,11 @@ namespace OA.Domain.ValueObjects
             Text = "工龄";
             Placeholder = "请填写工龄";
             Tips = "可根据[首次参加工作时间]信息自动计算，单位：年";
-            IsRequired = false;
-            IsEnableRequired = false;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = false;
+            IsDefault = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
         }
     }
 }

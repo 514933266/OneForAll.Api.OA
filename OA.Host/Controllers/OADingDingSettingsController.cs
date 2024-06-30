@@ -20,7 +20,7 @@ namespace OA.Host.Controllers
     /// 钉钉接入配置
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OADingDingSettingsController : BaseController
     {
         private readonly IOADingDingSettingService _service;

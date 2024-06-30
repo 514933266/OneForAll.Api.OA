@@ -125,27 +125,26 @@ namespace OA.Application
             if (errType == BaseErrType.Success)
             {
                 // 2. 移出团队
-                var historyList = new List<OATeamMemberHistory>();
-                var person = await _personRepository.FindAsync(form.PersonId);
-                var members = await _memberRepository.GetListAsync(w => w.OAPersonId == form.PersonId);
+                var historys = new List<OATeamMemberHistory>();
+                var members = await _memberRepository.GetListByPersonAsync(form.PersonId);
 
                 if (members.Any())
                 {
                     var memberIds = members.Select(s => s.Id).ToList();
-                    var teamIds = members.Select(s => s.OATeamId).ToList();
+                    var teamIds = members.Select(s => s.OATeam.Id).ToList();
                     var teams = await _teamRepository.GetListANTAsync(teamIds);
                     members.ForEach(e =>
                     {
-                        var team = teams.FirstOrDefault(w => w.Id == e.OATeamId);
-                        historyList.Add(new OATeamMemberHistory()
+                        var team = teams.FirstOrDefault(w => w.Id == e.OATeam.Id);
+                        historys.Add(new OATeamMemberHistory()
                         {
+                            OAPersonId = e.Id,
+                            PersonName = e.Name,
+                            PersonJob = e.Job,
                             OATeamId = team.Id,
                             TeamName = team.Name,
                             TargetOATeamId = team.Id,
                             TargetTeamName = team.Name,
-                            OAPersonId = person.Id,
-                            PersonName = person.Name,
-                            PersonJob = person.Job,
                             Type = OATeamMemberTransferEnum.Leave,
                             Remark = $"办理离职：{data.CreatorName}，原因：{data.Reason}，备注：{data.Remark}"
                         });
@@ -155,10 +154,8 @@ namespace OA.Application
                 }
 
                 // 3. 生成异动日志
-                if (data.CanCreateHistory)
-                {
-                    var effected = await _historyRepository.AddRangeAsync(historyList);
-                }
+                if (historys.Any())
+                    await _historyRepository.AddRangeAsync(historys);
             }
 
             // 4. 删除登记

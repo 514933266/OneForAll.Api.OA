@@ -19,16 +19,16 @@ namespace OA.Domain.ValueObjects
             Name = "Status";
             Text = "员工状态";
             Placeholder = "请选择员工状态";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "正式员工";
             TypeDetail = GetListSelection().ToJson();
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsShowEnabled = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableAddTypeDetail = true;
+            IsEnableEntryFileVisiable = true;
         }
 
         /// <summary>

@@ -17,11 +17,11 @@ namespace OA.Domain.ValueObjects
             Text = "家乡";
             Placeholder = "请填写家乡";
             IsRequired = true;
+            IsShowEnabled = true;
+            IsEntryFileVisiable = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

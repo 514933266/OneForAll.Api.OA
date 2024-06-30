@@ -16,13 +16,14 @@ namespace OA.Domain.ValueObjects
             Name = "ContactMobilePhone";
             Text = "联系人电话";
             Placeholder = "请填写联系人电话";
+            IsDefault = true;
             IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

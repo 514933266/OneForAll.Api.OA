@@ -16,16 +16,16 @@ namespace OA.Domain.ValueObjects
             Name = "ResignationFile";
             Text = "离职证明";
             Placeholder = "请上传离职证明";
-            IsDefault = false;
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             Type = Enums.OAPersonSettingFieldTypeEnum.File;
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
             IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

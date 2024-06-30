@@ -17,14 +17,11 @@ namespace OA.Domain.ValueObjects
             Name = "SchoolDate";
             Text = "毕业时间";
             Placeholder = "请选择毕业时间";
-            IsDefault = false;
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Date;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsDefault = true;
+            IsRequired = true;
             IsEntryFileVisiable = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

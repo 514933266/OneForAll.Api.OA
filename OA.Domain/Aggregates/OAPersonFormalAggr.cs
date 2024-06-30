@@ -15,12 +15,12 @@ namespace OA.Domain.Aggregates
         /// <summary>
         /// 计划转正日期
         /// </summary>
-        public DateTime PlanEntryDate { get; set; }
+        public DateTime? PlanEntryDate { get; set; }
 
         /// <summary>
         /// 实际转正日期
         /// </summary>
-        public DateTime ActualEntryDate { get; set; }
+        public DateTime? ActualEntryDate { get; set; }
 
         /// <summary>
         /// 试用期

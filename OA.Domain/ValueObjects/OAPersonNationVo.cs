@@ -16,10 +16,12 @@ namespace OA.Domain.ValueObjects
             Name = "Nation";
             Text = "民族";
             Placeholder = "请填写民族";
+            IsDefault = true;
             IsRequired = true;
+            IsShowEnabled = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
             IsEntryFileVisiable = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;

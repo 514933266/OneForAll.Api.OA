@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using OneForAll.Core;
 using OA.Application.Dtos;
+using OA.Domain.Models;
 
 namespace OA.Application.Interfaces
 {
@@ -19,6 +20,13 @@ namespace OA.Application.Interfaces
         /// <param name="name">类型</param>
         /// <returns>组织架构树</returns>
         Task<IEnumerable<OATeamTypeDto>> GetListAsync(string name);
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="form">表单</param>
+        /// <returns></returns>
+        Task<BaseErrType> AddAsync(OATeamTypeForm form);
 
         /// <summary>
         /// 删除

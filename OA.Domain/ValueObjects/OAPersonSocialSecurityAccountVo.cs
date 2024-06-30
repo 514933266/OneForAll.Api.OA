@@ -16,12 +16,8 @@ namespace OA.Domain.ValueObjects
             Name = "SocialSecurityAccount";
             Text = "社保账号";
             Placeholder = "请填写社保账号";
-            IsDefault = false;
-            IsRequired = false;
+            IsShowEnabled = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEmployeeVisiable = false;
-            IsEntryFileVisiable = false;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;

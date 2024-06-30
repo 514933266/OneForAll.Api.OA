@@ -65,6 +65,27 @@ namespace OA.Domain
         }
 
         /// <summary>
+        /// 创建系统默认职位分类
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseErrType> CreateDefaultAsync()
+        {
+            var data = new List<OAJobDuty>() {
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "高级管理层", Remark = "包括董事长、首席执行官（CEO）、首席财务官（CFO）、首席技术官（CTO）等" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "部门经理", Remark = "包括销售经理、市场经理、人力资源经理、财务经理、技术经理等" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "项目经理", Remark = "负责规划、协调和管理特定项目的实施和完成" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "行政支持", Remark = "包括行政助理、行政秘书、办公室管理员等，负责提供行政支持和协助高层管理人员" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "销售与客户服务", Remark = "包括销售代表、客户关系经理、客户支持专员等，负责销售和客户关系管理" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "财务和会计", Remark = "包括财务分析师、会计师、财务主管等，负责财务管理和会计工作" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "技术与研发", Remark = "包括软件工程师、系统分析师、研发工程师等，负责技术开发和研究" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "人力资源", Remark = "包括人力资源专员、招聘经理、培训发展经理等，负责招聘、培训和员工发展" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "市场营销", Remark = "包括市场营销经理、市场策划专员、市场调研分析师等，负责市场推广和品牌管理" },
+                new OAJobDuty() { SysTenantId = LoginUser.SysTenantId, Name = "生产与运营", Remark = "包括生产经理、物流经理、供应链分析师等，负责生产和运营管理" }
+            };
+            return await ResultAsync(() => _repository.AddRangeAsync(data));
+        }
+
+        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="form">表单</param>

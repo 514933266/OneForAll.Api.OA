@@ -61,7 +61,7 @@ namespace OA.Domain.AggregateRoots
         /// 是否启用
         /// </summary>
         [Required]
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// 是否分组（分组即可填写多栏信息）
@@ -140,10 +140,7 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 1;
             IsDefault = true;
             IsEnabled = true;
-            IsSortable = false;
-            IsEditable = false;
-            IsGrouped = false;
-            IsShowGrouped = false;
+            IsSortable = true;
             Type = OAPersonSettingTypeEnum.WorkInformation;
         }
 
@@ -157,9 +154,7 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 2;
             IsDefault = true;
             IsEnabled = true;
-            IsEditable = false;
-            IsGrouped = false;
-            IsShowGrouped = false;
+            IsSortable = true;
             Type = OAPersonSettingTypeEnum.PersonalInformation;
         }
 
@@ -173,9 +168,9 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 3;
             IsDefault = true;
             IsEnabled = true;
-            IsEditable = true;
+            IsSortable = true;
             IsGrouped = true;
-            IsShowGrouped = true;
+            IsEditable = true;
             Type = OAPersonSettingTypeEnum.EducationInformation;
         }
 
@@ -189,9 +184,9 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 4;
             IsDefault = true;
             IsEnabled = true;
-            IsEditable = true;
+            IsSortable = true;
             IsGrouped = true;
-            IsShowGrouped = true;
+            IsEditable = true;
             Type = OAPersonSettingTypeEnum.BankCardInformation;
         }
 
@@ -205,9 +200,9 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 5;
             IsDefault = true;
             IsEnabled = true;
+            IsSortable = true;
+            IsGrouped = true;
             IsEditable = true;
-            IsGrouped = false;
-            IsShowGrouped = false;
             Type = OAPersonSettingTypeEnum.ContractInformation;
         }
 
@@ -221,9 +216,9 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 6;
             IsDefault = true;
             IsEnabled = true;
-            IsEditable = true;
+            IsSortable = true;
             IsGrouped = true;
-            IsShowGrouped = true;
+            IsEditable = true;
             Type = OAPersonSettingTypeEnum.EmergencyContact;
         }
 
@@ -237,9 +232,9 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 7;
             IsDefault = true;
             IsEnabled = true;
-            IsEditable = true;
+            IsSortable = true;
             IsGrouped = true;
-            IsShowGrouped = true;
+            IsEditable = true;
             Type = OAPersonSettingTypeEnum.FamilyMember;
         }
 
@@ -253,9 +248,8 @@ namespace OA.Domain.AggregateRoots
             SortNumber = 8;
             IsDefault = true;
             IsEnabled = true;
+            IsSortable = true;
             IsEditable = true;
-            IsGrouped = false;
-            IsShowGrouped = false;
             Type = OAPersonSettingTypeEnum.PersonalData;
         }
     }

@@ -67,8 +67,8 @@ namespace OA.Domain.Interfaces
         /// <summary>
         /// 批量排序
         /// </summary>
-        /// <param name="entities">排序表单</param>
+        /// <param name="ids">排序表单</param>
         /// <returns>结果</returns>
-        Task<BaseErrType> SortAsync(IEnumerable<OATeamSortForm> entities);
+        Task<BaseErrType> SortAsync(IEnumerable<Guid> ids);
     }
 }

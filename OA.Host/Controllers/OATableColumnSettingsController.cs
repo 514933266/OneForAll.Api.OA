@@ -18,7 +18,7 @@ namespace OA.Host.Controllers
     /// 自定义表格字段显示配置
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OATableColumnSettingsController : BaseController
     {
         private readonly IOATableColumnSettingsService _service;

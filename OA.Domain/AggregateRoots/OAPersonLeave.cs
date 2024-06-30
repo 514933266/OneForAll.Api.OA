@@ -30,6 +30,12 @@ namespace OA.Domain.AggregateRoots
         public Guid OAPersonId { get; set; }
 
         /// <summary>
+        /// 所在部门
+        /// </summary>
+        [Required]
+        public string TeamName { get; set; } = "";
+
+        /// <summary>
         /// 预计离职时间
         /// </summary>
         [Required]

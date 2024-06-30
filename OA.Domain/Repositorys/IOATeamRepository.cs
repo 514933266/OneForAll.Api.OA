@@ -21,6 +21,13 @@ namespace OA.Domain.Repositorys
         /// </summary>
         /// <param name="ids">上级id</param>
         /// <returns>团队列表</returns>
+        Task<IEnumerable<OATeam>> GetListAsync(IEnumerable<Guid> ids);
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="ids">上级id</param>
+        /// <returns>团队列表</returns>
         Task<IEnumerable<OATeam>> GetListANTAsync(IEnumerable<Guid> ids);
 
         /// <summary>

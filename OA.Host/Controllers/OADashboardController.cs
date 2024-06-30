@@ -22,7 +22,7 @@ namespace OA.Host.Controllers
     /// 人员档案
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OADashboardController : BaseController
     {
         private readonly IOADashboardService _service;

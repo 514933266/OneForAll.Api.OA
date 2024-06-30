@@ -80,6 +80,8 @@ namespace OA.Domain
         public async Task<BaseErrType> SubmitAsync(OAPersonalEntryFileForm form)
         {
             var data = await _repository.GetIQFAsync(form.Id);
+            if (data == null) return BaseErrType.DataNotFound;
+
             data.ExtendInformationJson = form.ExtendInformations.ToJson();
             data.IsSubmitEntryFile = true;
 
@@ -107,12 +109,9 @@ namespace OA.Domain
 
             var maxSize = 5 * 1024 * 1024;
             var floder = id.ToString("N");
-            var name = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var extension = Path.GetExtension(filename);
-            filename = name.Append(extension);
 
-            var uploadPath = AppContext.BaseDirectory + Path.Combine(UPLOAD_PATH.Fmt(LoginUser.SysTenantId), floder);
-            var virtualPath = Path.Combine(VIRTUAL_PATH.Fmt(LoginUser.SysTenantId), floder, filename);
+            var uploadPath = AppContext.BaseDirectory + Path.Combine(UPLOAD_PATH.Fmt(entry.SysTenantId), floder);
+            var virtualPath = Path.Combine(VIRTUAL_PATH.Fmt(entry.SysTenantId), floder, filename);
             result = await _uploader.WriteAsync(file, uploadPath, filename, maxSize);
             // 设置返回虚拟路径
             if (result.State.Equals(UploadEnum.Success))

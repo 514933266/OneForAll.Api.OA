@@ -117,8 +117,6 @@ namespace OA.Domain.AggregateRoots
         /// <summary>
         /// 设置通知时间
         /// </summary>
-        /// <param name="timeType">时间类型</param>
-        /// <param name="otherTime">提前x小时</param>
         public void CalculateNotifyTime()
         {
             switch (NotifyTimeType)

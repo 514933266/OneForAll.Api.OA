@@ -16,12 +16,9 @@ namespace OA.Domain.ValueObjects
             Name = "Bank";
             Text = "开户行";
             Placeholder = "请填写开户行";
-            IsRequired = false;
+            IsDefault = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

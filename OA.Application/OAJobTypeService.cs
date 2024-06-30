@@ -38,6 +38,12 @@ namespace OA.Application
         public async Task<IEnumerable<OAJobTypeDto>> GetListAsync(string key)
         {
             var data = await _manager.GetListAsync(key);
+            if (!data.Any())
+            {
+                var errType = await _manager.CreateDefaultAsync();
+                if (errType == BaseErrType.Success)
+                    data = await _manager.GetListAsync(key);
+            }
             return _mapper.Map<IEnumerable<OAJobType>, IEnumerable<OAJobTypeDto>>(data);
         }
 

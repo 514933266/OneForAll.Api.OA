@@ -207,25 +207,20 @@ namespace OA.Domain
         /// <summary>
         /// 批量排序
         /// </summary>
-        /// <param name="entities">排序表单</param>
+        /// <param name="ids">排序表单</param>
         /// <returns>结果</returns>
-        public async Task<BaseErrType> SortAsync(IEnumerable<OATeamSortForm> entities)
+        public async Task<BaseErrType> SortAsync(IEnumerable<Guid> ids)
         {
-            var ids = entities.Select(s => s.Id);
-            var data = await _repository.GetListANTAsync(ids);
+            var data = await _repository.GetListAsync(ids);
             if (data == null) return BaseErrType.DataNotFound;
 
             var index = 0;
-            entities.ForEach(e =>
+            data.ForEach(e =>
             {
-                var item = data.FirstOrDefault(w => w.Id == e.Id);
-                if (item != null)
-                {
-                    item.SortNumber = index;
-                    index++;
-                }
+                e.SortNumber = index;
+                index++;
             });
-            return await ResultAsync(() => _repository.UpdateRangeAsync(data));
+            return await ResultAsync(() => _repository.SaveChangesAsync());
         }
     }
 }

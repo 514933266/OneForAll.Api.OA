@@ -18,9 +18,6 @@ namespace OA.Domain.ValueObjects
             Name = "EducationBackground";
             Text = "学历";
             Placeholder = "请选择学历";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Select;
             TypeDetail = new List<OAPersonDefaultSelectVo>()
             {
@@ -34,10 +31,13 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "博士", Value = "博士" },
                 new OAPersonDefaultSelectVo() { Name = "其他", Value = "其他" }
             }.ToJson();
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsDefault = true;
+            IsRequired = true;
             IsEntryFileVisiable = true;
+            IsEnableType = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableAddTypeDetail = true;
         }
     }
 }

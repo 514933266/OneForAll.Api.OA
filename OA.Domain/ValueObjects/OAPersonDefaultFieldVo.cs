@@ -39,7 +39,7 @@ namespace OA.Domain.ValueObjects
         public OAPersonSettingFieldTypeEnum Type { get; set; } = OAPersonSettingFieldTypeEnum.Text;
 
         /// <summary>
-        /// 是否启用类型（不启用无法编辑）
+        /// 是否启用类型（不启用无法编辑TypeDetail）
         /// </summary>
         public bool IsEnableType { get; set; }
 
@@ -49,14 +49,14 @@ namespace OA.Domain.ValueObjects
         public string TypeDetail { get; set; } = "";
 
         /// <summary>
-        /// 是否启用类型添加（不启用无法添加或删除）
+        /// 是否启用类型添加（不启用无法添加或删除TypeDetail）
         /// </summary>
         public bool IsEnableAddTypeDetail { get; set; }
 
         /// <summary>
         /// 是否默认字段
         /// </summary>
-        public bool IsDefault { get; set; } = true;
+        public bool IsDefault { get; set; }
 
         /// <summary>
         /// 是否启用
@@ -66,12 +66,12 @@ namespace OA.Domain.ValueObjects
         /// <summary>
         /// 是否显示启用
         /// </summary>
-        public bool IsShowEnabled { get; set; } = true;
+        public bool IsShowEnabled { get; set; }
 
         /// <summary>
         /// 是否必填
         /// </summary>
-        public bool IsRequired { get; set; } = true;
+        public bool IsRequired { get; set; }
 
         /// <summary>
         /// 是否启用必填（不启用无法编辑）
@@ -81,30 +81,30 @@ namespace OA.Domain.ValueObjects
         /// <summary>
         /// 员工可编辑
         /// </summary>
-        public bool IsEmployeeEditable { get; set; } = true;
+        public bool IsEmployeeEditable { get; set; }
 
         /// <summary>
-        /// 是否启用员工可编辑（不启用无法编辑）
+        /// 是否启用员工可编辑（不启用无法编辑IsEmployeeEditable）
         /// </summary>
         public bool IsEnableEmployeeEditable { get; set; }
 
         /// <summary>
         /// 员工可见
         /// </summary>
-        public bool IsEmployeeVisiable { get; set; } = true;
+        public bool IsEmployeeVisiable { get; set; }
 
         /// <summary>
-        /// 是否启用显示员工可见（不启用无法编辑）
+        /// 是否启用显示员工可见（不启用无法编辑IsEmployeeVisiable）
         /// </summary>
         public bool IsEnableEmployeeVisiable { get; set; }
 
         /// <summary>
         /// 是否启用员工入职登记表显示
         /// </summary>
-        public bool IsEntryFileVisiable { get; set; } = true;
+        public bool IsEntryFileVisiable { get; set; }
 
         /// <summary>
-        /// 是否启用员工入职登记表显示（不启用无法编辑）
+        /// 是否启用员工入职登记表显示（不启用无法编辑IsEntryFileVisiable）
         /// </summary>
         [Required]
         public bool IsEnableEntryFileVisiable { get; set; }

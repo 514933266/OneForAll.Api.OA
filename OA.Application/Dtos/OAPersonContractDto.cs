@@ -67,6 +67,11 @@ namespace OA.Application.Dtos
         public DateTime ContractEndDate { get; set; }
 
         /// <summary>
+        /// 合同公司
+        /// </summary>
+        public string ContractCompany { get; set; }
+
+        /// <summary>
         /// 合同类型
         /// </summary>
         public string ContractType { get; set; }

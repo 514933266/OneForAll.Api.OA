@@ -19,8 +19,6 @@ namespace OA.Domain.ValueObjects
             Name = "MaritalStatus";
             Text = "婚姻状况";
             Placeholder = "请选择婚姻状况";
-            IsRequired = true;
-            IsEnableRequired = true;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "未婚";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -31,10 +29,17 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "丧偶", Value = "丧偶" },
                 new OAPersonDefaultSelectVo() { Name = "分居", Value = "分居" }
             }.ToJson();
+            IsDefault = true;
+            IsRequired = true;
+            IsEnableType = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEntryFileVisiable = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableAddTypeDetail = true;
         }
     }
 }

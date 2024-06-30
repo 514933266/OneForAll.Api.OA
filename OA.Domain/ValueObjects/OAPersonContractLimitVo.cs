@@ -19,10 +19,6 @@ namespace OA.Domain.ValueObjects
             Name = "ContractLimit";
             Text = "合同期限";
             Placeholder = "请选择合同期限";
-            IsDefault = false;
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "无";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -35,10 +31,12 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "36个月", Value = "36个月" },
                 new OAPersonDefaultSelectVo() { Name = "36个月以上", Value = "36个月以上" }
             }.ToJson();
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEnableText = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

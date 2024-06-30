@@ -20,9 +20,6 @@ namespace OA.Domain.ValueObjects
             Name = "EmployeeType";
             Text = "员工类型";
             Placeholder = "请选择员工类型";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "全职";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -33,10 +30,13 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "劳务派遣", Value = "劳务派遣" },
                 new OAPersonDefaultSelectVo() { Name = "退休返聘", Value = "退休返聘" }
             }.ToJson();
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsShowEnabled = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableAddTypeDetail = true;
+            IsEnableEntryFileVisiable = true;
         }
     }
 }

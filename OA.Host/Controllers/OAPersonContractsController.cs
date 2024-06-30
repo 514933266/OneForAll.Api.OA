@@ -14,7 +14,7 @@ namespace OA.Host.Controllers
     /// 合同管理
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OAPersonContractsController : BaseController
     {
         private readonly IOAPersonContractService _service;

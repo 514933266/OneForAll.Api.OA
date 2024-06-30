@@ -23,5 +23,9 @@ namespace OA.Application.Dtos
         /// </summary>
         public string Remark { get; set; }
 
+        /// <summary>
+        /// 是否系统默认
+        /// </summary>
+        public bool IsDefault { get; set; }
     }
 }

@@ -63,7 +63,7 @@ namespace OA.Repository
         /// <param name="startDate">开始入职日期</param>
         /// <param name="endDate">开始入职日期</param>
         /// <returns></returns>
-        public async Task<IEnumerable<OAPersonEntryAggr>> GetListAsync(
+        public async Task<IEnumerable<OAPersonEntry>> GetListAsync(
             string name,
             string creatorName,
             string mobilePhone,
@@ -82,27 +82,7 @@ namespace OA.Repository
             if (endDate != null)
                 predicate = predicate.And(w => w.EstimateEntryDate <= endDate);
 
-            var dbSet = DbSet.Where(predicate);
-            var teamDbSet = Context.Set<OATeam>();
-            var sql = (from entry in dbSet
-                       join team in teamDbSet on entry.TeamId equals team.Id
-                       select new OAPersonEntryAggr()
-                       {
-                           Id = entry.Id,
-                           Name = entry.Name,
-                           Job = entry.Job,
-                           TeamId = entry.TeamId,
-                           MobilePhone = entry.MobilePhone,
-                           SysTenantId = entry.SysTenantId,
-                           CreatorId = entry.CreatorId,
-                           CreatorName = entry.CreatorName,
-                           CreateTime = entry.CreateTime,
-                           EstimateEntryDate = entry.EstimateEntryDate,
-                           IsSubmitEntryFile = entry.IsSubmitEntryFile,
-                           ExtendInformationJson = entry.ExtendInformationJson,
-                           OATeam = team
-                       });
-            return await sql.ToListAsync();
+            return await DbSet.Where(predicate).ToListAsync();
         }
         #endregion
 

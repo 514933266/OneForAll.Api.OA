@@ -10,6 +10,7 @@ using OA.Application.Dtos;
 using OA.Domain.Interfaces;
 using OA.Application.Interfaces;
 using OneForAll.Core.Extension;
+using System.IO;
 
 namespace OA.Application
 {
@@ -125,6 +126,17 @@ namespace OA.Application
         {
             await _historyManager.AddAsync(form);
             return await _manager.TransferAsync(form.TeamId, form.TargetTeamId, form.Ids);
+        }
+
+        /// <summary>
+        /// 导入Excel
+        /// </summary>
+        /// <param name="teamId">部门id</param>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        public async Task<BaseMessage> ImportExcelAsync(Guid teamId, IEnumerable<OATeamMemberImportForm> data)
+        {
+            return await _manager.ImportExcelAsync(teamId, data);
         }
     }
 }

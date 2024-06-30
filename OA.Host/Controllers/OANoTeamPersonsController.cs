@@ -17,7 +17,7 @@ namespace OA.Host.Controllers
     /// 未加入团队成员
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OANoTeamPersonsController
     {
         private readonly IOATeamMemberService _service;

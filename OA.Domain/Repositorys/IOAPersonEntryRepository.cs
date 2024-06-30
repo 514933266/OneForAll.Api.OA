@@ -34,7 +34,7 @@ namespace OA.Domain.Repositorys
         /// <param name="startDate">开始入职日期</param>
         /// <param name="endDate">开始入职日期</param>
         /// <returns></returns>
-        Task<IEnumerable<OAPersonEntryAggr>> GetListAsync(
+        Task<IEnumerable<OAPersonEntry>> GetListAsync(
              string name,
              string creatorName,
              string mobilePhone,

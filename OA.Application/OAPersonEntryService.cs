@@ -73,7 +73,17 @@ namespace OA.Application
              DateTime? endDate)
         {
             var data = await _manager.GetListAsync(name, creatorName, mobilePhone, startDate, endDate);
-            return _mapper.Map<IEnumerable<OAPersonEntryAggr>, IEnumerable<OAPersonEntryDto>>(data);
+            var items = _mapper.Map<IEnumerable<OAPersonEntry>, IEnumerable<OAPersonEntryDto>>(data);
+            items.ForEach(e =>
+            {
+                var days = (DateTime.Now - e.EstimateEntryDate).TotalDays;
+                if (days >= 1)
+                {
+                    e.IsOverdue = true;
+                    e.OverdueDays = (int)days;
+                }
+            });
+            return items;
         }
 
         /// <summary>
@@ -139,32 +149,91 @@ namespace OA.Application
                 info.IdCard = info.ExtendInformations == null ? "" : info.ExtendInformations.FirstOrDefault(w => w.Name == new OAPersonIdCardVo().Name)?.Value;
             }
 
-            // 默认信息填充到附加信息中
+            #region 默认信息填充到附加信息中
+
             var entryDate = DateTime.Now.ToString("yyyy-MM-dd");
             var workNumberName = new OAPersonWorkNumberVo().Name;
             var entryDateName = new OAPersonEntryDateVo().Name;
             var employeeStatusName = new OAPersonEmployeeStatusVo().Name;
             var employeeTypeName = new OAPersonEmployeeTypeVo().Name;
             var remarkName = new OAPersonRemarkVo().Name;
-            if (!info.ExtendInformations.Any(w => w.Name == workNumberName))
+
+            var workNumberItem = info.ExtendInformations.FirstOrDefault(w => w.Name == workNumberName);
+            if (workNumberItem == null)
+            {
                 info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = workNumberName, Value = info.WorkNumber });
-            if (!info.ExtendInformations.Any(w => w.Name == entryDateName))
+            }
+            else
+            {
+                workNumberItem.Value = info.WorkNumber;
+            }
+
+            var entryDateItem = info.ExtendInformations.FirstOrDefault(w => w.Name == entryDateName);
+            if (entryDateItem == null)
+            {
                 info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = entryDateName, Value = entryDate });
-            if (!info.ExtendInformations.Any(w => w.Name == employeeStatusName))
+            }
+            else
+            {
+                entryDateItem.Value = entryDate;
+            }
+
+            var employeeStatusItem = info.ExtendInformations.FirstOrDefault(w => w.Name == employeeStatusName);
+            if (employeeStatusItem == null)
+            {
                 info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = employeeStatusName, Value = info.EmployeeStatus });
-            if (!info.ExtendInformations.Any(w => w.Name == employeeTypeName))
+            }
+            else
+            {
+                employeeStatusItem.Value = info.EmployeeStatus;
+            }
+
+            var employeeTypeItem = info.ExtendInformations.FirstOrDefault(w => w.Name == employeeTypeName);
+            if (employeeTypeItem == null)
+            {
                 info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = employeeTypeName, Value = info.EmployeeType });
-            if (!info.ExtendInformations.Any(w => w.Name == remarkName))
+            }
+            else
+            {
+                employeeTypeItem.Value = info.EmployeeType;
+            }
+
+            var remarkItem = info.ExtendInformations.FirstOrDefault(w => w.Name == remarkName);
+            if (remarkItem == null)
+            {
                 info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = remarkName, Value = info.Remark });
+            }
+            else
+            {
+                remarkItem.Value = info.Remark;
+            }
             if (info.EmployeeStatus == "试用员工")
             {
                 var tryDate = new OAPersonTryDateVo().Name;
                 var planEntryDateName = new OAPersonPlanEntryDateVo().Name;
-                if (!info.ExtendInformations.Any(w => w.Name == tryDate))
+
+                var tryDateItem = info.ExtendInformations.FirstOrDefault(w => w.Name == tryDate);
+                if (tryDateItem == null)
+                {
                     info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = tryDate, Value = "3个月" });
-                if (!info.ExtendInformations.Any(w => w.Name == planEntryDateName))
+                }
+                else
+                {
+                    tryDateItem.Value = tryDate;
+                }
+
+                var planEntryDateItem = info.ExtendInformations.FirstOrDefault(w => w.Name == planEntryDateName);
+                if (planEntryDateItem == null)
+                {
                     info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = planEntryDateName, Value = entryDate.TryDateTime().AddMonths(3).ToString("yyyy-MM-dd") });
+                }
+                else
+                {
+                    planEntryDateItem.Value = entryDate.TryDateTime().AddMonths(3).ToString("yyyy-MM-dd");
+                }
             }
+
+            #endregion
 
             // 1. 创建人员档案
             info.Id = data.Id;// 将入职资料的id传递给人员档案，直接将上传的附件同步而不需要转移文件
@@ -175,11 +244,11 @@ namespace OA.Application
                 if (person != null)
                 {
                     // 2. 加入团队
-                    errType = await _memberManager.AddAsync(data.TeamId, new List<Guid>() { person.Id });
+                    var errType2 = await _memberManager.AddAsync(data.TeamId, new List<Guid>() { person.Id });
                     // 3. 生成异动日志
-                    if (errType == BaseErrType.Success)
+                    if (errType2 == BaseErrType.Success)
                     {
-                        errType = await _memberHistoryManager.AddAsync(new OATeamMemberForm()
+                        await _memberHistoryManager.AddAsync(new OATeamMemberForm()
                         {
                             TeamId = data.TeamId,
                             Id = person.Id,

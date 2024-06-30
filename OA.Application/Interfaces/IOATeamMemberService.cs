@@ -54,5 +54,13 @@ namespace OA.Application.Interfaces
         /// <param name="form">表单</param>
         /// <returns>结果</returns>
         Task<BaseErrType> TransferAsync(OATeamMemberTransferForm form);
+
+        /// <summary>
+        /// 导入Excel
+        /// </summary>
+        /// <param name="teamId">部门id</param>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        Task<BaseMessage> ImportExcelAsync(Guid teamId, IEnumerable<OATeamMemberImportForm> data);
     }
 }

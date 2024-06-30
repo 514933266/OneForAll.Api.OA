@@ -72,9 +72,9 @@ namespace OA.Domain
                     if (tryDate != null)
                         info.TryDate = tryDate.Value;
                     if (planDate != null)
-                        info.PlanEntryDate = planDate.Value.TryDateTime();
+                        info.PlanEntryDate = planDate.Value.IsNullOrEmpty() ? null : planDate.Value.TryDateTime();
                     if (actualDate != null)
-                        info.ActualEntryDate = actualDate.Value.TryDateTime();
+                        info.ActualEntryDate = actualDate.Value.IsNullOrEmpty() ? null : actualDate.Value.TryDateTime();
 
                     if (planStartDate != null && info.PlanEntryDate < planStartDate || info.PlanEntryDate > planEndDate)
                         return;

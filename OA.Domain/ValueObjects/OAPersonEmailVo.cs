@@ -17,13 +17,16 @@ namespace OA.Domain.ValueObjects
             Name = "Email";
             Text = "邮箱";
             Placeholder = "请填写有效电子邮箱";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeVisiable = true;
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsEnabled = true;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEmployeeVisiable = true;
             IsEntryFileVisiable = true;
+            IsEntryFileVisiable = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

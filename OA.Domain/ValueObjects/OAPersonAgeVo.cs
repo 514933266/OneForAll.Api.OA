@@ -17,13 +17,13 @@ namespace OA.Domain.ValueObjects
             Text = "年龄";
             Placeholder = "请填写年龄";
             Tips = "可根据[身份证]信息自动计算";
-            IsRequired = false;
-            IsEnableRequired = false;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = false;
+            IsDefault = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEmployeeVisiable = true;
+            IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEntryFileVisiable = true;
         }
     }
 }

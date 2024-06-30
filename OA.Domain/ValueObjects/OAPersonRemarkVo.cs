@@ -17,14 +17,12 @@ namespace OA.Domain.ValueObjects
             Name = "Remark";
             Text = "备注";
             Placeholder = "请填写备注";
-            IsRequired = false;
+            IsShowEnabled = true;
+            IsEnableText = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEmployeeVisiable = false;
-            IsEntryFileVisiable = false;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEntryFileVisiable = true;
         }
     }
 }

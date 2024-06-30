@@ -24,6 +24,6 @@ namespace OA.Application.Dtos
         /// <summary>
         /// 是否主管
         /// </summary>
-        public string IsLeader { get; set; }
+        public bool IsLeader { get; set; }
     }
 }

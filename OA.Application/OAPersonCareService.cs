@@ -11,13 +11,15 @@ using OA.Domain.Interfaces;
 using OA.Application.Dtos;
 using OA.Domain.AggregateRoots;
 using OA.Application.Interfaces;
+using OA.Domain.Aggregates;
+using OneForAll.Core.Extension;
 
 namespace OA.Application
 {
     /// <summary>
     /// 员工生日
     /// </summary>
-    public class OAPersonCareService: IOAPersonBirthdayCareService
+    public class OAPersonCareService : IOAPersonBirthdayCareService
     {
         private readonly IMapper _mapper;
         private readonly IOATeamManager _teamManager;
@@ -42,9 +44,26 @@ namespace OA.Application
         public async Task<IEnumerable<OAPersonBirthdayCareDto>> GetListBirthdayAsync(Guid teamId, DateTime startDate, DateTime endDate)
         {
             var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.Valid);
-            var data = await _manager.GetListBirthdayAsync(teamId, startDate, endDate, teams);
+            var data = await _manager.GetListBirthdayAsync(teamId, startDate, endDate);
 
-            return _mapper.Map<IEnumerable<OAPerson>, IEnumerable<OAPersonBirthdayCareDto>>(data);
+            var items = _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OAPersonBirthdayCareDto>>(data);
+            foreach (var item in items)
+            {
+                var person = data.FirstOrDefault(w => w.Id == item.Id);
+                if (person != null && person.OATeam != null)
+                {
+                    item.Teams = new List<OAPersonTeamDto>()
+                    {
+                        new OAPersonTeamDto()
+                        {
+                             IsLeader = person.Contact.IsLeader,
+                             Name = person.OATeam.Name,
+                             Type = person.OATeam.Type
+                        }
+                    };
+                }
+            }
+            return items;
         }
 
         /// <summary>
@@ -56,9 +75,26 @@ namespace OA.Application
         public async Task<IEnumerable<OAPersonCompanyCareDto>> GetListCompanyAsync(Guid teamId, DateTime date)
         {
             var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.Valid);
-            var data = await _manager.GetListCompanyAsync(teamId, date, teams);
+            var data = await _manager.GetListCompanyAsync(teamId, date);
 
-            return _mapper.Map<IEnumerable<OAPerson>, IEnumerable<OAPersonCompanyCareDto>>(data);
+            var items = _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OAPersonCompanyCareDto>>(data);
+            foreach (var item in items)
+            {
+                var person = data.FirstOrDefault(w => w.Id == item.Id);
+                if (person != null && person.OATeam != null)
+                {
+                    item.Teams = new List<OAPersonTeamDto>()
+                    {
+                        new OAPersonTeamDto()
+                        {
+                             IsLeader = person.Contact.IsLeader,
+                             Name = person.OATeam.Name,
+                             Type = person.OATeam.Type
+                        }
+                    };
+                }
+            }
+            return items;
         }
     }
 }

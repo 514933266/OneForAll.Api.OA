@@ -12,7 +12,6 @@ using OA.Domain.Interfaces;
 using OA.Domain.Repositorys;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Enums;
-using static NPOI.HSSF.Util.HSSFColor;
 
 namespace OA.Domain
 {

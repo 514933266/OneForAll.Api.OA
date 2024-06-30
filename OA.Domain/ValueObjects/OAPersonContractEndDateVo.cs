@@ -17,14 +17,13 @@ namespace OA.Domain.ValueObjects
             Name = "ContractEndDate";
             Text = "合同结束日";
             Placeholder = "请选择合同结束日";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Date;
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEnableText = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

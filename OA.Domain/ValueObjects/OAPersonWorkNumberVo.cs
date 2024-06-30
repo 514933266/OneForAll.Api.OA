@@ -17,13 +17,11 @@ namespace OA.Domain.ValueObjects
             Name = "WorkNumber";
             Text = "工号";
             Placeholder = "请填写员工工号";
-            IsRequired = false;
+            IsDefault = true;
+            IsShowEnabled = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
         }
     }
 }

@@ -11,6 +11,8 @@ namespace OA.Application.Dtos
     /// </summary>
     public class OAPersonCompanyCareDto
     {
+        public Guid Id { get; set; }
+
         /// <summary>
         /// 名称
         /// </summary>

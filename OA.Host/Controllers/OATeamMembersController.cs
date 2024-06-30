@@ -10,6 +10,8 @@ using OA.Domain.Models;
 using OA.Public.Models;
 using OA.Application.Dtos;
 using OA.Application.Interfaces;
+using Microsoft.AspNetCore.Http;
+using OA.Application;
 
 namespace OA.Host.Controllers
 {
@@ -17,7 +19,7 @@ namespace OA.Host.Controllers
     /// 团队成员
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OATeamMembersController : BaseController
     {
         private readonly IOATeamMemberService _service;
@@ -44,7 +46,7 @@ namespace OA.Host.Controllers
         /// <param name="member">人员</param>
         /// <returns>结果</returns>
         [HttpPost]
-        [CheckPermission(Controller = "OATeam", Action = ConstPermission.EnterView)]
+        [CheckPermission(Controller = "OATeams", Action = ConstPermission.EnterView)]
         public async Task<BaseMessage> AddAsync([FromBody] OATeamMemberForm member)
         {
             var msg = new BaseMessage();
@@ -64,7 +66,7 @@ namespace OA.Host.Controllers
         /// <param name="member">人员</param>
         /// <returns>结果</returns>
         [HttpPut]
-        [CheckPermission(Controller = "OATeam", Action = ConstPermission.EnterView)]
+        [CheckPermission(Controller = "OATeams", Action = ConstPermission.EnterView)]
         public async Task<BaseMessage> UpdateAsync([FromBody] OATeamMemberForm member)
         {
             var msg = new BaseMessage();
@@ -84,7 +86,7 @@ namespace OA.Host.Controllers
         /// <returns>结果</returns>
         [HttpPatch]
         [Route("Batch/IsDeleted")]
-        [CheckPermission(Controller = "OATeam", Action = ConstPermission.EnterView)]
+        [CheckPermission(Controller = "OATeams", Action = ConstPermission.EnterView)]
         public async Task<BaseMessage> DeleteAsync([FromBody] OATeamMemberDeleteForm form)
         {
             var msg = new BaseMessage();
@@ -105,7 +107,7 @@ namespace OA.Host.Controllers
         /// <returns>结果</returns>
         [HttpPatch]
         [Route("Batch/TeamId")]
-        [CheckPermission(Controller = "OATeam", Action = ConstPermission.EnterView)]
+        [CheckPermission(Controller = "OATeams", Action = ConstPermission.EnterView)]
         public async Task<BaseMessage> TransferAsync([FromBody] OATeamMemberTransferForm form)
         {
             var msg = new BaseMessage();
@@ -118,6 +120,28 @@ namespace OA.Host.Controllers
                 case BaseErrType.DataError: return msg.Fail("数据异常");
                 case BaseErrType.DataNotFound: return msg.Fail("请选择要调动的成员");
                 default: return msg.Fail("人员调动失败");
+            }
+        }
+
+        /// <summary>
+        /// 导入成员
+        /// </summary>
+        /// <param name="teamId">部门id</param>
+        /// <param name="form">文件表单</param>
+        /// <returns>结果</returns>
+        [HttpPost]
+        [Route("Default/Excel")]
+        [CheckPermission(Controller = "OATeams", Action = ConstPermission.EnterView)]
+        public async Task<BaseMessage> ImportMemberExcelAsync([FromQuery] Guid teamId, [FromForm] IFormCollection form)
+        {
+            var msg = await ImportExcelAsync<OATeamMemberImportForm>(form, (data) => _service.ImportExcelAsync(teamId, data));
+            switch (msg.ErrType)
+            {
+                case BaseErrType.Success: return msg.Success("导入成功");
+                case BaseErrType.DataEmpty: return msg.Fail("请选择文件");
+                case BaseErrType.DataError: return msg.Fail("数据异常");
+                case BaseErrType.DataNotFound: return msg.Fail("没有可以导入的数据");
+                default: return msg.Fail("导入失败");
             }
         }
     }

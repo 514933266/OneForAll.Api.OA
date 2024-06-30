@@ -19,10 +19,6 @@ namespace OA.Domain.ValueObjects
             Name = "ContractType";
             Text = "合同类型";
             Placeholder = "请选择合同类型";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableAddTypeDetail = true;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "固定期限劳动合同";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -36,10 +32,12 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "返聘协议", Value = "返聘协议" },
                 new OAPersonDefaultSelectVo() { Name = "其他", Value = "其他" }
             }.ToJson();
-            IsEnableEmployeeEditable = true;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEnableText = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableAddTypeDetail = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

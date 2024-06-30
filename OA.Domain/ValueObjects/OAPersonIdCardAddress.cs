@@ -16,9 +16,10 @@ namespace OA.Domain.ValueObjects
             Name = "IdCardAddress";
             Text = "身份证地址";
             Placeholder = "请填写身份证地址";
-            IsRequired = false;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
             IsEntryFileVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;

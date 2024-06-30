@@ -22,13 +22,16 @@ namespace OA.Domain
     public class OAPersonEntryManager : OABaseManager, IOAPersonEntryManager
     {
         private readonly IOAPersonEntryRepository _repository;
+        private readonly IOATeamRepository _teamRepository;
 
         public OAPersonEntryManager(
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            IOAPersonEntryRepository repository) : base(mapper, httpContextAccessor)
+            IOAPersonEntryRepository repository,
+            IOATeamRepository teamRepository) : base(mapper, httpContextAccessor)
         {
             _repository = repository;
+            _teamRepository = teamRepository;
         }
 
         /// <summary>
@@ -56,24 +59,14 @@ namespace OA.Domain
         /// <param name="startDate">开始入职日期</param>
         /// <param name="endDate">开始入职日期</param>
         /// <returns>列表</returns>
-        public async Task<IEnumerable<OAPersonEntryAggr>> GetListAsync(
+        public async Task<IEnumerable<OAPersonEntry>> GetListAsync(
              string name,
              string creatorName,
              string mobilePhone,
              DateTime? startDate,
              DateTime? endDate)
         {
-            var data = await _repository.GetListAsync(name, creatorName, mobilePhone, startDate, endDate);
-            data.ForEach(e =>
-            {
-                var days = (DateTime.Now - e.EstimateEntryDate).TotalDays;
-                if (days >= 1)
-                {
-                    e.IsOverdue = true;
-                    e.OverdueDays = (int)days;
-                }
-            });
-            return data;
+            return await _repository.GetListAsync(name, creatorName, mobilePhone, startDate, endDate);
         }
 
         /// <summary>
@@ -87,7 +80,11 @@ namespace OA.Domain
             if (exists != null)
                 return BaseErrType.DataExist;
 
+            var team = await _teamRepository.FindAsync(form.TeamId);
+
             var data = _mapper.Map<OAPersonEntry>(form);
+
+            data.TeamName = team?.Name ?? "";
             data.SysTenantId = LoginUser.SysTenantId;
             data.CreatorId = LoginUser.Id;
             data.CreatorName = LoginUser.Name;

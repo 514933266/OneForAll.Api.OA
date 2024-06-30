@@ -31,13 +31,15 @@ namespace OA.Domain
     public class OAPersonCareManager : OABaseManager, IOAPersonCareManager
     {
         private readonly IOAPersonRepository _repository;
-
+        private readonly IOATeamPersonContactRepository _contactRepository;
         public OAPersonCareManager(
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            IOAPersonRepository repository) : base(mapper, httpContextAccessor)
+            IOAPersonRepository repository,
+            IOATeamPersonContactRepository contactRepository) : base(mapper, httpContextAccessor)
         {
             _repository = repository;
+            _contactRepository = contactRepository;
         }
 
         /// <summary>
@@ -46,27 +48,12 @@ namespace OA.Domain
         /// <param name="teamId">团队id</param>
         /// <param name="startDate">开始日期</param>
         /// <param name="endDate">结束日期</param>
-        /// <param name="teams">团队资源</param>
         /// <returns>列表</returns>
-        public async Task<IEnumerable<OAPerson>> GetListBirthdayAsync(Guid teamId, DateTime startDate, DateTime endDate, IEnumerable<OATeamTreeAggr> teams)
+        public async Task<IEnumerable<OATeamMemberAggr>> GetListBirthdayAsync(Guid teamId, DateTime startDate, DateTime endDate)
         {
             var data = await _repository.GetListBirthdayAsync(startDate, endDate);
-
-            if (teamId != Guid.Empty)
-            {
-                var result = new List<OAPerson>();
-                data.ForEach(e =>
-                {
-                    //if (!e.OATeamPersonContacts.Any()) return;
-
-                    //var teamList = teams.FindChildren(teamId);
-                    //if (!teamList.Any(w => w.Id == e.OATeamPersonContacts.First().OATeamId)) return;
-
-                    result.Add(e);
-                });
-                return result;
-            }
-            return data;
+            var ids = data.Select(s => s.Id).ToList();
+            return await _contactRepository.GetListByTeamAsync(teamId, ids);
         }
 
         /// <summary>
@@ -74,27 +61,12 @@ namespace OA.Domain
         /// </summary>
         /// <param name="teamId">团队id</param>
         /// <param name="date">日期</param>
-        /// <param name="teams">团队资源</param>
         /// <returns>列表</returns>
-        public async Task<IEnumerable<OAPerson>> GetListCompanyAsync(Guid teamId, DateTime date, IEnumerable<OATeamTreeAggr> teams)
+        public async Task<IEnumerable<OATeamMemberAggr>> GetListCompanyAsync(Guid teamId, DateTime date)
         {
             var data = await _repository.GetListCompanyAsync(date);
-
-            if (teamId != Guid.Empty)
-            {
-                var result = new List<OAPerson>();
-                //data.ForEach(e =>
-                //{
-                //    if (!e.OATeamPersonContacts.Any()) return;
-
-                //    var teamList = teams.FindChildren(teamId);
-                //    if (!teamList.Any(w => w.Id == e.OATeamPersonContacts.First().OATeamId)) return;
-
-                //    result.Add(e);
-                //});
-                return result;
-            }
-            return data;
+            var ids = data.Select(s => s.Id).ToList();
+            return await _contactRepository.GetListByTeamAsync(teamId, ids);
         }
     }
 }

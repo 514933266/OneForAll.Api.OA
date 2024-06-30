@@ -16,13 +16,14 @@ namespace OA.Domain.ValueObjects
             Name = "ContactName";
             Text = "紧急联系人姓名";
             Placeholder = "请填写紧急联系人姓名";
+            IsDefault = true;
             IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

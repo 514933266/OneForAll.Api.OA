@@ -16,12 +16,9 @@ namespace OA.Domain.ValueObjects
             Name = "BankAccount";
             Text = "银行卡号";
             Placeholder = "请填写银行卡号";
-            IsRequired = false;
+            IsDefault = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

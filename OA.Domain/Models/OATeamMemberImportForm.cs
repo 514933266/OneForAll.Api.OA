@@ -27,12 +27,14 @@ namespace OA.Domain.Models
         /// <summary>
         /// 人员职级
         /// </summary>
+        [Required(ErrorMessage = "人员职级不能为空")]
         [StringLength(20, ErrorMessage = "员工职级最大长度为20个字符")]
         public string Job { get; set; }
 
         /// <summary>
         /// 身份证号
         /// </summary>
+        [Required(ErrorMessage = "身份证号不能为空")]
         [StringLength(20, ErrorMessage = "身份证号最大长度为20个字符")]
         public string IdCard { get; set; }
 

@@ -55,7 +55,6 @@ namespace OA.Domain
 
             var data = _mapper.Map<OATeamType>(entity);
             data.SysTenantId = LoginUser.SysTenantId;
-            data.CanAddChild = true;
 
             return await ResultAsync(() => _repository.AddAsync(data));
         }
@@ -85,6 +84,8 @@ namespace OA.Domain
         public async Task<BaseErrType> DeleteAsync(Guid id)
         {
             var data = await _repository.FindAsync(id);
+            if (data == null) return BaseErrType.DataNotFound;
+
             return await ResultAsync(() => _repository.DeleteAsync(data));
         }
     }

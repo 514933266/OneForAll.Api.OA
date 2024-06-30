@@ -13,6 +13,7 @@ using OA.Domain.Interfaces;
 using OA.Domain.Aggregates;
 using OA.Domain.Repositorys;
 using OA.Domain.AggregateRoots;
+using System.Linq.Expressions;
 
 namespace OA.Domain
 {
@@ -32,22 +33,6 @@ namespace OA.Domain
         }
 
         /// <summary>
-        /// 获取分页
-        /// </summary>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="pageSize">页数</param>
-        /// <param name="key">关键字</param>
-        /// <returns>分页列表</returns>
-        public async Task<PageList<OAJobType>> GetPageAsync(int pageIndex, int pageSize, string key)
-        {
-            if (pageIndex < 1) pageIndex = 1;
-            if (pageSize < 1) pageSize = 10;
-            if (pageSize > 100) pageSize = 100;
-
-            return await _repository.GetPageAsync(pageIndex, pageSize, key);
-        }
-
-        /// <summary>
         /// 获取列表
         /// </summary>
         /// <param name="key">关键字</param>
@@ -62,6 +47,23 @@ namespace OA.Domain
             {
                 return await _repository.GetListAsync(w => w.Name.Contains(key));
             }
+        }
+
+        /// <summary>
+        /// 创建系统默认职位分类
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseErrType> CreateDefaultAsync()
+        {
+            var data = new List<OAJobType>() {
+                new OAJobType() { SysTenantId = LoginUser.SysTenantId, Name = "行政管理类", Remark = "包括行政总监、行政经理、行政助理等" },
+                new OAJobType() { SysTenantId = LoginUser.SysTenantId, Name = "人力资源类", Remark = "包括人力资源总监、人力资源经理、招聘专员等" },
+                new OAJobType() { SysTenantId = LoginUser.SysTenantId, Name = "财务会计类", Remark = "包括财务总监、财务经理、会计师等" },
+                new OAJobType() { SysTenantId = LoginUser.SysTenantId, Name = "销售市场类", Remark = "包括销售总监、销售经理、市场营销专员等" },
+                new OAJobType() { SysTenantId = LoginUser.SysTenantId, Name = "技术研发类", Remark = "包括技术总监、研发工程师、软件开发工程师等" },
+                new OAJobType() { SysTenantId = LoginUser.SysTenantId, Name = "客户服务类", Remark = "包括客户服务经理、客户关系管理专员等" }
+            };
+            return await ResultAsync(() => _repository.AddRangeAsync(data));
         }
 
         /// <summary>

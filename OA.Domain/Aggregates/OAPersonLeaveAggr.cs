@@ -13,11 +13,6 @@ namespace OA.Domain.Aggregates
     public class OAPersonLeaveAggr : OAPersonLeave
     {
         /// <summary>
-        /// 加入部门
-        /// </summary>
-        public OATeam OATeam { get; set; }
-
-        /// <summary>
         /// 人员信息
         /// </summary>
         public OAPerson OAPerson { get; set; }

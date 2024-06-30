@@ -17,10 +17,6 @@ namespace OA.Domain.ValueObjects
             Name = "FamilySex";
             Text = "性别(家人)";
             Placeholder = "请填写性别(家人)";
-            IsDefault = false;
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.Radio;
             Value = "1";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -28,10 +24,14 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "女", Value = "女" },
                 new OAPersonDefaultSelectVo() { Name = "男", Value = "男" },
             }.ToJson();
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

@@ -17,13 +17,13 @@ namespace OA.Domain.ValueObjects
             Text = "出生日期";
             Placeholder = "请填写出生日期";
             Tips = "可根据[身份证]信息自动计算";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.Date;
+            IsDefault = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
             IsEnableEntryFileVisiable = true;
         }
     }

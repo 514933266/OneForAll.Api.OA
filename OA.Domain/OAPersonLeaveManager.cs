@@ -22,13 +22,16 @@ namespace OA.Domain
     public class OAPersonLeaveManager : OABaseManager, IOAPersonLeaveManager
     {
         private readonly IOAPersonLeaveRepository _repository;
+        private readonly IOATeamPersonContactRepository _contactRepository;
 
         public OAPersonLeaveManager(
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            IOAPersonLeaveRepository repository) : base(mapper, httpContextAccessor)
+            IOAPersonLeaveRepository repository,
+            IOATeamPersonContactRepository contactRepository) : base(mapper, httpContextAccessor)
         {
             _repository = repository;
+            _contactRepository = contactRepository;
         }
 
         /// <summary>
@@ -77,7 +80,10 @@ namespace OA.Domain
             if (exists != null)
                 return BaseErrType.DataExist;
 
+            var members = await _contactRepository.GetListByPersonAsync(form.PersonId);
+
             var data = _mapper.Map<OAPersonLeaveForm, OAPersonLeave>(form);
+            data.TeamName = string.Join(',', members.Select(s => s.OATeam?.Name));
             data.SysTenantId = LoginUser.SysTenantId;
             data.CreatorId = LoginUser.Id;
             data.CreatorName = LoginUser.Name;
@@ -113,7 +119,7 @@ namespace OA.Domain
         }
 
         /// <summary>
-        /// 确认到岗
+        /// 确认离职
         /// </summary>
         /// <param name="id">数据id</param>
         /// <returns>结果</returns>

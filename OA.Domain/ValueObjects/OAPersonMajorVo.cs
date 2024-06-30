@@ -17,13 +17,11 @@ namespace OA.Domain.ValueObjects
             Name = "Major";
             Text = "专业";
             Placeholder = "请填写专业";
-            IsDefault = false;
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEntryFileVisiable = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

@@ -364,7 +364,7 @@ namespace OA.Domain
 
             // 重新排序
             var index = 0;
-            var updateData = totalData.Where(w => w.Id != id).ToList();
+            var updateData = totalData.Where(w => w.Id != id).OrderBy(o => o.SortNumber).ToList();
             updateData.ForEach(e =>
             {
                 e.SortNumber = index;
@@ -391,17 +391,17 @@ namespace OA.Domain
         public async Task<BaseErrType> SortAsync(IEnumerable<Guid> ids)
         {
             var data = await _repository.GetListAsync(ids);
-            var sortableData = data.Where(w => w.IsSortable).ToList();
+            var sortableData = data.Where(w => w.IsSortable);
             if (!sortableData.Any()) return BaseErrType.DataNotFound;
 
             // 重新排序
-            var index = data.Count() - sortableData.Count;
+            var index = data.Count() - sortableData.Count();
             sortableData.ForEach(e =>
             {
                 e.SortNumber = index;
                 index++;
             });
-            return await ResultAsync(() => _repository.UpdateRangeAsync(sortableData));
+            return await ResultAsync(() => _repository.SaveChangesAsync());
         }
     }
 }

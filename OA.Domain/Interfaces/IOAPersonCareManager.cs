@@ -19,17 +19,15 @@ namespace OA.Domain.Interfaces
         /// <param name="teamId">团队id</param>
         /// <param name="startDate">开始日期</param>
         /// <param name="endDate">结束日期</param>
-        /// <param name="teams">团队资源</param>
         /// <returns>列表</returns>
-        Task<IEnumerable<OAPerson>> GetListBirthdayAsync(Guid teamId, DateTime startDate, DateTime endDate, IEnumerable<OATeamTreeAggr> teams);
+        Task<IEnumerable<OATeamMemberAggr>> GetListBirthdayAsync(Guid teamId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// 获取入职周年列表
         /// </summary>
         /// <param name="teamId">团队id</param>
         /// <param name="date">日期</param>
-        /// <param name="teams">团队资源</param>
         /// <returns>列表</returns>
-        Task<IEnumerable<OAPerson>> GetListCompanyAsync(Guid teamId, DateTime date, IEnumerable<OATeamTreeAggr> teams);
+        Task<IEnumerable<OATeamMemberAggr>> GetListCompanyAsync(Guid teamId, DateTime date);
     }
 }

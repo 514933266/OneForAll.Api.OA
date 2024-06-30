@@ -31,6 +31,12 @@ namespace OA.Domain.Interfaces
         Task<IEnumerable<OAJobDuty>> GetListAsync(string key);
 
         /// <summary>
+        /// 创建系统默认职位分类
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseErrType> CreateDefaultAsync();
+
+        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="form">表单</param>

@@ -16,10 +16,9 @@ namespace OA.Domain.ValueObjects
             Name = "BranchBank";
             Text = "开户行支行";
             Placeholder = "请填写开户行支行";
-            IsDefault = false;
-            IsRequired = false;
-            IsEmployeeEditable = false;
-            IsEntryFileVisiable = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

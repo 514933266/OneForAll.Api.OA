@@ -142,7 +142,7 @@ namespace OA.Domain
         /// <returns>结果</returns>
         public async Task<BaseErrType> SortAsync(Guid settingId, IEnumerable<Guid> ids)
         {
-            var data = await _repository.GetListBySettingAsync(ids);
+            var data = await _repository.GetListAsync(ids);
             if (!data.Any()) return BaseErrType.DataNotFound;
             if (data.Any(w => w.OAPersonSettingId != settingId)) return BaseErrType.DataError;
 

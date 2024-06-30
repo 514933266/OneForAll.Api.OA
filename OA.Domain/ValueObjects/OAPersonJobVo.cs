@@ -17,10 +17,12 @@ namespace OA.Domain.ValueObjects
             Name = "Job";
             Text = "职位";
             Placeholder = "请填写职位";
+            IsDefault = true;
             IsRequired = true;
+            IsEnableText = true;
+            IsEmployeeVisiable = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeVisiable = true;
             IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;

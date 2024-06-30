@@ -258,9 +258,6 @@ namespace OA.Domain
 
             var maxSize = 5 * 1024 * 1024;
             var floder = id.ToString("N");
-            var name = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var extension = Path.GetExtension(filename);
-            filename = name.Append(extension);
 
             var uploadPath = AppContext.BaseDirectory + Path.Combine(UPLOAD_PATH.Fmt(LoginUser.SysTenantId), floder);
             var virtualPath = Path.Combine(VIRTUAL_PATH.Fmt(LoginUser.SysTenantId), floder, filename);
@@ -288,7 +285,7 @@ namespace OA.Domain
         public async Task<BaseErrType> LeaveAsync(IEnumerable<Guid> ids)
         {
             var data = await _repository.GetListAsync(ids);
-            if (data.Any()) return BaseErrType.DataNotFound;
+            if (!data.Any()) return BaseErrType.DataNotFound;
 
             using (var tran = new UnitOfWork().BeginTransaction())
             {
@@ -324,12 +321,20 @@ namespace OA.Domain
         /// <param name="employeeStatus">员工状态</param>
         /// <param name="employeeType">员工类型</param>
         /// <param name="fields">选择导出字段</param>
+        /// <param name="jobs">岗位职级</param>
         /// <param name="startEntryDate">开始入职时间</param>
         /// <param name="endEntryDate">结束入职时间</param>
         /// <returns>文件流</returns>
-        public async Task<byte[]> ExportExcelAsync(OAPersonOnJobStatusEnum onJobStatus, string employeeType, string employeeStatus, IEnumerable<string> fields, DateTime? startEntryDate, DateTime? endEntryDate)
+        public async Task<byte[]> ExportExcelAsync(
+            OAPersonOnJobStatusEnum onJobStatus,
+            string employeeType,
+            string employeeStatus,
+            IEnumerable<string> fields,
+            IEnumerable<string> jobs,
+            DateTime? startEntryDate,
+            DateTime? endEntryDate)
         {
-            var data = await _repository.GetListAsync(onJobStatus, employeeType, employeeStatus, startEntryDate, endEntryDate);
+            var data = await _repository.GetListAsync(onJobStatus, employeeType, employeeStatus, jobs, startEntryDate, endEntryDate);
             if (data.Any())
             {
                 IWorkbook workbook;
@@ -435,6 +440,10 @@ namespace OA.Domain
                             SysTenantId = LoginUser.SysTenantId
                         };
                         person.InitExtendInfomation(infos);
+                        if (person.Name.IsNullOrEmpty())
+                        {
+                            throw new Exception("姓名信息不允许为空");
+                        }
                         if (person.Job.IsNullOrEmpty())
                         {
                             throw new Exception("职级信息不允许为空");

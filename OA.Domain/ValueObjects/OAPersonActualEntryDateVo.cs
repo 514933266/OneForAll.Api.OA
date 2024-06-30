@@ -14,16 +14,15 @@ namespace OA.Domain.ValueObjects
         public OAPersonActualEntryDateVo()
         {
             Name = "ActualEntryDate";
-            Text = "实际转正日期";
+            Text = "转正日期";
             Placeholder = "请选择实际转正日期";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.Date;
-            IsEnableEmployeeEditable = false;
+            IsDefault = true;
+            IsEnableRequired = true;
+            IsShowEnabled = true;
+            IsEnableEntryFileVisiable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

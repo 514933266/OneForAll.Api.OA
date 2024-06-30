@@ -74,26 +74,20 @@ namespace OA.Repository
 
             var dbSet = DbSet.Where(predicate);
             var personSet = name.IsNullOrEmpty() ? Context.Set<OAPerson>() : Context.Set<OAPerson>().Where(w => w.Name.Contains(name));
-            var memberSet = Context.Set<OATeamPersonContact>();
-            var teamDbSet = teamId == null ? Context.Set<OATeam>() : Context.Set<OATeam>().Where(w => w.Id == teamId);
             var sql = (from leave in dbSet
                        join person in personSet on leave.OAPersonId equals person.Id
-                       join member in memberSet on person.Id equals member.OAPersonId into letJoinMember
-                       from lfMember in letJoinMember.DefaultIfEmpty()
-                       join team in teamDbSet on lfMember.OATeamId equals team.Id into letJoinTeam
-                       from lfTeam in letJoinTeam.DefaultIfEmpty()
                        select new OAPersonLeaveAggr()
                        {
                            Id = leave.Id,
                            Reason = leave.Reason,
                            Remark = leave.Remark,
+                           TeamName = leave.TeamName,
                            SysTenantId = leave.SysTenantId,
                            CreatorId = leave.CreatorId,
                            CreatorName = leave.CreatorName,
                            CreateTime = leave.CreateTime,
                            CanCreateHistory = leave.CanCreateHistory,
                            EstimateLeaveDate = leave.EstimateLeaveDate,
-                           OATeam = lfTeam,
                            OAPerson = person
                        });
             return await sql.ToListAsync();

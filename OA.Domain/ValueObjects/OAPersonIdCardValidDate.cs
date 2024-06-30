@@ -16,14 +16,15 @@ namespace OA.Domain.ValueObjects
             Name = "IdCardValidDate";
             Text = "身份证有效期";
             Placeholder = "请填写身份证有效期";
-            IsRequired = false;
+            Type = Enums.OAPersonSettingFieldTypeEnum.Date;
+            IsDefault = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
             IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            Type = Enums.OAPersonSettingFieldTypeEnum.Date;
         }
     }
 }

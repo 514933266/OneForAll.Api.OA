@@ -17,14 +17,13 @@ namespace OA.Domain.ValueObjects
             Name = "EntryDate";
             Text = "入职日期";
             Placeholder = "请选择入职日期";
+            Type = OAPersonSettingFieldTypeEnum.Date;
+            IsDefault = true;
             IsRequired = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            Type = OAPersonSettingFieldTypeEnum.Date;
-            IsEnableEmployeeEditable = true;
+            IsEnableEntryFileVisiable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

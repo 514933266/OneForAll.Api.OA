@@ -16,14 +16,14 @@ namespace OA.Domain.ValueObjects
             Name = "FamilyName";
             Text = "姓名(家人)";
             Placeholder = "请填写姓名(家人)";
-            IsDefault = false;
+            IsDefault = true;
             IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

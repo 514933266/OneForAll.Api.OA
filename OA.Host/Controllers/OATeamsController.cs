@@ -19,7 +19,7 @@ namespace OA.Host.Controllers
     /// 企业组织架构
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OATeamsController : BaseController
     {
         private readonly IOATeamService _teamService;
@@ -27,8 +27,6 @@ namespace OA.Host.Controllers
         {
             _teamService = teamService;
         }
-
-        #region 组织架构
 
         /// <summary>
         /// 获取组织架构树
@@ -133,37 +131,21 @@ namespace OA.Host.Controllers
         /// <summary>
         /// 排序
         /// </summary>
-        /// <param name="entities">排序表单（以此从小到大排列）</param>
+        /// <param name="ids">排序表单（以此从小到大排列）</param>
         /// <returns>结果</returns>
         [HttpPatch]
         [Route("Batch/SortNumber")]
         [CheckPermission(Action = ConstPermission.EnterView)]
-        public async Task<BaseMessage> SortAsync([FromBody] IEnumerable<OATeamSortForm> entities)
+        public async Task<BaseMessage> SortAsync([FromBody] IEnumerable<Guid> ids)
         {
             var msg = new BaseMessage();
-            msg.ErrType = await _teamService.SortAsync(entities);
+            msg.ErrType = await _teamService.SortAsync(ids);
 
             switch (msg.ErrType)
             {
                 case BaseErrType.Success: return msg.Success("操作成功");
                 default: return msg.Fail("操作失败");
             }
-        }
-
-        #endregion
-
-        #region 成员
-
-        /// <summary>
-        /// 获取成员列表
-        /// </summary>
-        /// <param name="id">组织id</param>
-        /// <returns>成员列表</returns>
-        [HttpGet]
-        [Route("{id}/Members")]
-        public async Task<IEnumerable<OATeamMemberDto>> GetListMemberAsync(Guid id)
-        {
-            return await _teamService.GetListMemberAsync(id);
         }
 
         /// <summary>
@@ -173,6 +155,7 @@ namespace OA.Host.Controllers
         /// <param name="personIds">人员id</param>
         /// <returns>结果</returns>
         [HttpPost]
+        [Obsolete]
         [Route("{id}/Members")]
         [CheckPermission(Action = ConstPermission.EnterView)]
         public async Task<BaseMessage> AddMemberAsync(Guid id, [FromBody] IEnumerable<Guid> personIds)
@@ -187,52 +170,6 @@ namespace OA.Host.Controllers
                 default: return msg.Fail("添加部门成员失败");
             }
         }
-
-        /// <summary>
-        /// 删除成员（批量）
-        /// </summary>
-        /// <param name="id">组织id</param>
-        /// <param name="contactIds">关联id</param>
-        /// <returns>结果</returns>
-        [HttpPatch]
-        [Route("{id}/Members/Batch/IsDeleted")]
-        [CheckPermission(Action = ConstPermission.EnterView)]
-        public async Task<BaseMessage> DeleteMemberAsync(Guid id, [FromBody] IEnumerable<Guid> contactIds)
-        {
-            var msg = new BaseMessage();
-            msg.ErrType = await _teamService.DeleteMemberAsync(id, contactIds);
-
-            switch (msg.ErrType)
-            {
-                case BaseErrType.Success: return msg.Success("删除成员成功");
-                case BaseErrType.DataNotFound: return msg.Fail("成员信息不存在");
-                case BaseErrType.NotAllow: return msg.Fail("不允许该操作");
-                default: return msg.Fail("删除成员失败");
-            }
-        }
-
-        /// <summary>
-        /// 导入成员
-        /// </summary>
-        /// <param name="id">部门id</param>
-        /// <param name="form">文件表单</param>
-        /// <returns>结果</returns>
-        [HttpPost]
-        [Route("{id}/MemberExcel")]
-        [CheckPermission(Action = ConstPermission.EnterView)]
-        public async Task<BaseMessage> ImportMemberExcelAsync(Guid id, [FromForm] IFormCollection form)
-        {
-            var msg = await ImportExcelAsync<OATeamMemberImportForm>(form, (data) => _teamService.ImportMemberExcelAsync(id, data));
-            switch (msg.ErrType)
-            {
-                case BaseErrType.Success: return msg.Success("导入成功");
-                case BaseErrType.DataEmpty: return msg.Fail("请选择文件");
-                case BaseErrType.DataError: return msg.Fail("数据异常");
-                case BaseErrType.DataNotFound: return msg.Fail("没有可以导入的数据");
-                default: return msg.Fail("导入失败");
-            }
-        }
-        #endregion
     }
 }
 

@@ -225,6 +225,23 @@ namespace OA.Domain
         }
 
         /// <summary>
+        /// 人员档案删除（批量）
+        /// </summary>
+        /// <param name="personIds">关联id</param>
+        /// <returns>结果</returns>
+        public async Task<BaseErrType> RemoveFileAsync(IEnumerable<Guid> personIds)
+        {
+            if (!personIds.Any())
+                return BaseErrType.DataEmpty;
+
+            var data = await _repository.GetListAsync(w => personIds.Contains(w.OAPersonId));
+            if (!data.Any())
+                return BaseErrType.DataEmpty;
+
+            return await ResultAsync(() => _repository.DeleteRangeAsync(data));
+        }
+
+        /// <summary>
         /// 人员离职（批量）
         /// </summary>
         /// <param name="teamId">团队id</param>

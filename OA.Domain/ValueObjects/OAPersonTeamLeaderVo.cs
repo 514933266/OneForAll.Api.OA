@@ -18,13 +18,9 @@ namespace OA.Domain.ValueObjects
             Text = "直属主管";
             Placeholder = "请填写直属主管姓名";
             Tips = "可根据[组织架构关系]自动生成";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsDefault = true;
+            IsShowEnabled = true;
+            IsEmployeeVisiable = true;
         }
     }
 }

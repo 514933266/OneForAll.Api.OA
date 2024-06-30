@@ -33,6 +33,20 @@ namespace OA.Repository
         /// </summary>
         /// <param name="ids">上级id</param>
         /// <returns>团队列表</returns>
+        public async Task<IEnumerable<OATeam>> GetListAsync(IEnumerable<Guid> ids)
+        {
+            var predicate = PredicateBuilder.Create<OATeam>(w => ids.Contains(w.Id));
+
+            return await DbSet
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="ids">上级id</param>
+        /// <returns>团队列表</returns>
         public async Task<IEnumerable<OATeam>> GetListANTAsync(IEnumerable<Guid> ids)
         {
             var predicate = PredicateBuilder.Create<OATeam>(w => ids.Contains(w.Id));

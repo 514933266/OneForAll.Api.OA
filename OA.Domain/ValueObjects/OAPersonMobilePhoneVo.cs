@@ -17,13 +17,14 @@ namespace OA.Domain.ValueObjects
             Name = "MobilePhone";
             Text = "手机号";
             Placeholder = "请填写手机号码";
+            IsDefault = true;
             IsRequired = true;
+            IsEntryFileVisiable = true;
+            IsEmployeeVisiable = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEntryFileVisiable = true;
         }
     }
 }

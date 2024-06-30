@@ -81,6 +81,13 @@ namespace OA.Domain.Interfaces
         Task<BaseErrType> SetLeaderAsync(Guid teamId, IEnumerable<Guid> personIds);
 
         /// <summary>
+        /// 人员档案删除（批量）
+        /// </summary>
+        /// <param name="personIds">关联id</param>
+        /// <returns>结果</returns>
+        Task<BaseErrType> RemoveFileAsync(IEnumerable<Guid> personIds);
+
+        /// <summary>
         /// 人员离职（批量）
         /// </summary>
         /// <param name="teamId">团队id</param>

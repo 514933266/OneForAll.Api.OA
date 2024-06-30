@@ -16,14 +16,12 @@ namespace OA.Domain.ValueObjects
             Name = "PlanEntryDate";
             Text = "计划转正日期";
             Placeholder = "请选择计划转正日期";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = Enums.OAPersonSettingFieldTypeEnum.Date;
-            IsEnableEmployeeEditable = true;
+            IsEnableRequired = true;
+            IsShowEnabled = true;
+            IsEnableEntryFileVisiable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

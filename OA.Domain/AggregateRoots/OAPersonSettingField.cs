@@ -160,6 +160,11 @@ namespace OA.Domain.AggregateRoots
         [Required]
         public int SortNumber { get; set; }
 
+        /// <summary>
+        /// 根据设置更新字段信息
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Update(OAPersonSettingFieldForm entity)
         {
             if (IsEnableText) Text = entity.Text;
@@ -168,10 +173,8 @@ namespace OA.Domain.AggregateRoots
             if (IsEnableAddTypeDetail) TypeDetail = entity.TypeDetails.ToJson();
             if (IsEnableEmployeeEditable) IsEmployeeEditable = entity.IsEmployeeEditable;
             if (IsEnableEmployeeVisiable) IsEmployeeVisiable = entity.IsEmployeeVisiable;
-            Text = entity.Text;
+            if (IsEnableEntryFileVisiable) IsEntryFileVisiable = entity.IsEntryFileVisiable;
             Placeholder = entity.Placeholder;
-            TypeDetail = Type == OAPersonSettingFieldTypeEnum.Select ? TypeDetail : "";
-            IsEnableAddTypeDetail = Type == OAPersonSettingFieldTypeEnum.Select ? true : false;
             return true;
         }
     }

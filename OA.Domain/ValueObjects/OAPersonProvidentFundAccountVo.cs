@@ -16,12 +16,8 @@ namespace OA.Domain.ValueObjects
             Name = "ProvidentFundAccount";
             Text = "公积金账号";
             Placeholder = "请填写公积金账号";
-            IsDefault = false;
-            IsRequired = false;
+            IsShowEnabled = true;
             IsEnableRequired = true;
-            IsEmployeeVisiable = false;
-            IsEmployeeEditable = false;
-            IsEntryFileVisiable = false;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;

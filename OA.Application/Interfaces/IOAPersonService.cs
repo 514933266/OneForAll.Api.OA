@@ -99,10 +99,18 @@ namespace OA.Application.Interfaces
         /// <param name="employeeStatus">员工状态</param>
         /// <param name="employeeType">员工类型</param>
         /// <param name="fields">选择导出字段</param>
+        /// <param name="jobs">岗位职级</param>
         /// <param name="startEntryDate">开始入职时间</param>
         /// <param name="endEntryDate">结束入职时间</param>
         /// <returns>文件流</returns>
-        Task<byte[]> ExportExcelAsync(OAPersonOnJobStatusEnum onJobStatus, string employeeType, string employeeStatus, IEnumerable<string> fields, DateTime? startEntryDate, DateTime? endEntryDate);
+        Task<byte[]> ExportExcelAsync(
+            OAPersonOnJobStatusEnum onJobStatus,
+            string employeeType,
+            string employeeStatus,
+            IEnumerable<string> fields,
+            IEnumerable<string> jobs,
+            DateTime? startEntryDate,
+            DateTime? endEntryDate);
 
         /// <summary>
         /// 导入Excel

@@ -16,13 +16,11 @@ namespace OA.Domain.ValueObjects
             Name = "ContractCompany";
             Text = "合同公司";
             Placeholder = "请填写合同公司";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
+            IsDefault = true;
+            IsRequired = true;
+            IsEnableText = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

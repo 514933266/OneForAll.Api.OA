@@ -16,13 +16,15 @@ namespace OA.Domain.ValueObjects
             Name = "IdCard";
             Text = "证件号码";
             Placeholder = "请填写证件号码";
+            IsDefault = true;
             IsRequired = true;
+            IsEnableText = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
             IsEntryFileVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEntryFileVisiable = true;
+            IsEnableEntryFileVisiable = true;
         }
     }
 }

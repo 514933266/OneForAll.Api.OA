@@ -17,15 +17,12 @@ namespace OA.Domain.ValueObjects
             Name = "LeaveDate";
             Text = "离职日期";
             Placeholder = "请选择离职日期";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEmployeeVisiable = false;
-            IsEntryFileVisiable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
-            IsEnableEntryFileVisiable = false;
             Type = OAPersonSettingFieldTypeEnum.Date;
+            IsDefault = true;
+            IsEnableRequired = true;
+            IsEnableEntryFileVisiable = true;
+            IsEnableEmployeeVisiable = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

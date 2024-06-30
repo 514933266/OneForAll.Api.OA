@@ -17,8 +17,11 @@ namespace OA.Domain.ValueObjects
             Name = "Name";
             Text = "姓名";
             Placeholder = "请填写真实姓名";
+            IsDefault = true;
+            IsEnabled = true;
+            IsRequired = true;
+            IsEmployeeVisiable = true;
             IsEntryFileVisiable = true;
-            IsEnableEntryFileVisiable = false;
         }
     }
 }

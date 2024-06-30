@@ -17,7 +17,7 @@ namespace OA.Host.Controllers
     /// 转正管理
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OAPersonFormalsController : BaseController
     {
         private readonly IOAPersonFormalService _service;

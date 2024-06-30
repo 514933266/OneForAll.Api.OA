@@ -16,14 +16,12 @@ namespace OA.Domain.ValueObjects
             Name = "ContractSignCount";
             Text = "续签次数";
             Placeholder = "请填写合同续签次数";
-            IsDefault = false;
-            IsRequired = false;
+            IsRequired = true;
+            IsShowEnabled = true;
+            IsEnableText = true;
             IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = false;
-            IsEnableEntryFileVisiable = false;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

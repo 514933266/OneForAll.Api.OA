@@ -19,11 +19,6 @@ namespace OA.Domain.ValueObjects
             Name = "HouseholdType";
             Text = "户籍类型";
             Placeholder = "请选择户籍类型";
-            IsDefault = false;
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableAddTypeDetail = true;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "无";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -36,10 +31,17 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "外地城镇（省外）", Value = "外地城镇（省外）" },
                 new OAPersonDefaultSelectVo() { Name = "外地农村（省外）", Value = "外地农村（省外）" }
             }.ToJson();
+            IsDefault = true;
+            IsRequired = true;
+            IsEnableType = true;
+            IsShowEnabled = true;
+            IsEnableRequired = true;
+            IsEntryFileVisiable = true;
+            IsEmployeeVisiable = true;
             IsEnableEmployeeEditable = true;
             IsEnableEmployeeVisiable = true;
-            IsEntryFileVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableAddTypeDetail = true;
         }
     }
 }

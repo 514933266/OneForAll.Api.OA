@@ -30,6 +30,13 @@ namespace OA.Domain.AggregateRoots
         public Guid TeamId { get; set; }
 
         /// <summary>
+        /// 部门名称
+        /// </summary>
+        [Required]
+        [StringLength(20)]
+        public string TeamName { get; set; }
+
+        /// <summary>
         /// 人员姓名
         /// </summary>
         [Required]

@@ -130,7 +130,7 @@ namespace OA.Domain.AggregateRoots
         [Column(TypeName = "decimal(6,2)")]
         public decimal JoinAge { get; set; }
 
-        // <summary>
+        /// <summary>
         /// 创建人id
         /// </summary>
         [Required]
@@ -238,7 +238,6 @@ namespace OA.Domain.AggregateRoots
                 if (employeeStatus != null) EmployeeStatus = employeeStatus.Value;
                 if (entryDate != null) EntryDate = entryDate.Value.IsNullOrEmpty() ? null : entryDate.Value.TryDateTime();
                 if (leaveDate != null) LeaveDate = leaveDate.Value.IsNullOrEmpty() ? null : leaveDate.Value.TryDateTime();
-                if (actualEntryDate != null && actualEntryDate.Value.IsNullOrEmpty()) actualEntryDate.Value = EntryDate.HasValue ? EntryDate.Value.ToString() : "";
 
                 #endregion
 

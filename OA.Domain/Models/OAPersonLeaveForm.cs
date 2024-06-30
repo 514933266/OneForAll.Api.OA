@@ -31,19 +31,12 @@ namespace OA.Domain.Models
         /// 离职原因
         /// </summary>
         [Required]
-        [StringLength(50)]
-        public string Reason { get; set; }
+        public List<string> Reasons { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
         [StringLength(500)]
         public string Remark { get; set; }
-
-        /// <summary>
-        /// 是否生成异动记录
-        /// </summary>
-        [Required]
-        public bool CanCreateHistory { get; set; }
     }
 }

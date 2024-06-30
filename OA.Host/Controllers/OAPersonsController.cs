@@ -14,6 +14,7 @@ using OA.Public.Models;
 using OA.Application.Dtos;
 using OA.Application.Interfaces;
 using OneForAll.Core.Extension;
+using System.IO;
 
 namespace OA.Host.Controllers
 {
@@ -40,6 +41,7 @@ namespace OA.Host.Controllers
         /// <returns>人员分页</returns>
         [HttpGet]
         [Route("{pageIndex}/{pageSize}")]
+        [CheckPermission(Action = ConstPermission.EnterView)]
         public async Task<PageList<OAPersonDto>> GetPageAsync(
             int pageIndex,
             int pageSize,
@@ -75,14 +77,12 @@ namespace OA.Host.Controllers
             return await _service.GetAsync(id);
         }
 
-        
-
         /// <summary>
         /// 获取统计信息
         /// </summary>
         /// <returns>列表</returns>
         [HttpGet]
-        [Route("Statistic")]
+        [Route("Default/Statistic")]
         public async Task<OAPersonStatisticDto> GetStatisticsAsync()
         {
             return await _service.GetStatisticsAsync();
@@ -154,12 +154,13 @@ namespace OA.Host.Controllers
         /// 上传文件
         /// </summary>
         /// <param name="id">人员id</param>
+        /// <param name="field">档案字段信息</param>
         /// <param name="form">文件流</param>
         /// <returns>结果（头像的路径会在Data中输出）</returns>
         [HttpPost]
         [Route("{id}/Files")]
         [CheckPermission(Action = ConstPermission.EnterView)]
-        public async Task<BaseMessage> UploadFileAsync(Guid id, [FromForm] IFormCollection form)
+        public async Task<BaseMessage> UploadFileAsync([FromRoute] Guid id, [FromForm] OAPersonSettingFieldForm field, [FromForm] IFormCollection form)
         {
             var msg = new BaseMessage();
             if (form.Files.Count > 0)
@@ -168,8 +169,9 @@ namespace OA.Host.Controllers
                 if (id == Guid.Empty)
                     id = Guid.NewGuid();
                 var file = form.Files.FirstOrDefault();
-                var callbacks = await _service.UploadFileAsync(id, file.FileName, file.OpenReadStream());
-                msg.Data = new { Username = LoginUser.UserName, Id = id, Result = callbacks };
+                var fileName = field.Text + Path.GetExtension(file.FileName);
+                var callbacks = await _service.UploadFileAsync(id, fileName, file.OpenReadStream());
+                msg.Data = new { Field = field, Id = id, Result = callbacks };
                 switch (callbacks.State)
                 {
                     case UploadEnum.Success: return msg.Success("上传成功");
@@ -226,24 +228,26 @@ namespace OA.Host.Controllers
         /// 导出Excel
         /// </summary>
         /// <param name="onJobStatus">类型 -1全部 0在职 1离职</param>
-        /// <param name="employeeStatus">员工状态</param>
         /// <param name="employeeType">员工类型</param>
+        /// <param name="employeeStatus">员工状态</param>
         /// <param name="fields">选择导出字段</param>
+        /// <param name="jobs">职级</param>
         /// <param name="startEntryDate">开始入职时间</param>
         /// <param name="endEntryDate">结束入职时间</param>
         /// <returns>文件流</returns>
         [HttpGet]
-        [Route("Excel")]
+        [Route("Default/Excel")]
         [CheckPermission(Action = ConstPermission.EnterView)]
         public async Task<IActionResult> ExportExcelAsync(
             [FromQuery] OAPersonOnJobStatusEnum onJobStatus,
             [FromQuery] string employeeType,
             [FromQuery] string employeeStatus,
-            [FromQuery] IEnumerable<string> fields,
+            [FromQuery] string[] fields,
+            [FromQuery] string[] jobs,
             [FromQuery] DateTime? startEntryDate,
             [FromQuery] DateTime? endEntryDate)
         {
-            var file = await _service.ExportExcelAsync(onJobStatus, employeeType, employeeStatus, fields, startEntryDate, endEntryDate);
+            var file = await _service.ExportExcelAsync(onJobStatus, employeeType, employeeStatus, fields, jobs, startEntryDate, endEntryDate);
             return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "人员资料.xlsx");
         }
 
@@ -253,7 +257,7 @@ namespace OA.Host.Controllers
         /// <param name="form">文件表单</param>
         /// <returns>结果</returns>
         [HttpPost]
-        [Route("Excel")]
+        [Route("Default/Excel")]
         [CheckPermission(Action = ConstPermission.EnterView)]
         public async Task<BaseMessage> ImportExcelAsync([FromForm] IFormCollection form)
         {

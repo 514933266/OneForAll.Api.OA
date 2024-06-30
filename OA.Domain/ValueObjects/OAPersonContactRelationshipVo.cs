@@ -19,10 +19,6 @@ namespace OA.Domain.ValueObjects
             Name = "ContactRelationship";
             Text = "联系人关系";
             Placeholder = "请选择联系人关系";
-            IsDefault = false;
-            IsRequired = true;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
             Type = OAPersonSettingFieldTypeEnum.Select;
             Value = "无";
             TypeDetail = new List<OAPersonDefaultSelectVo>()
@@ -33,10 +29,16 @@ namespace OA.Domain.ValueObjects
                 new OAPersonDefaultSelectVo() { Name = "子女", Value = "子女" },
                 new OAPersonDefaultSelectVo() { Name = "其他", Value = "其他" }
             }.ToJson();
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsRequired = true;
+            IsShowEnabled = true;
             IsEntryFileVisiable = true;
+            IsEnableText = true;
+            IsEnableType = true;
+            IsEnableRequired = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
+            IsEnableAddTypeDetail = true;
+            IsEnableEmployeeEditable = true;
         }
     }
 }

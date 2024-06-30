@@ -22,12 +22,18 @@ namespace OA.Domain
     public class OAPersonContractManager : OABaseManager, IOAPersonContractManager
     {
         private readonly IOATeamPersonContactRepository _contactRepository;
+        private readonly IOAPersonSettingRepository _settingRepository;
+        private readonly IOAPersonSettingFieldRepository _settingFieldRepository;
         public OAPersonContractManager(
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            IOATeamPersonContactRepository contactRepository) : base(mapper, httpContextAccessor)
+            IOATeamPersonContactRepository contactRepository,
+            IOAPersonSettingRepository settingRepository,
+            IOAPersonSettingFieldRepository settingFieldRepository) : base(mapper, httpContextAccessor)
         {
             _contactRepository = contactRepository;
+            _settingRepository = settingRepository;
+            _settingFieldRepository = settingFieldRepository;
         }
 
         /// <summary>
@@ -38,21 +44,37 @@ namespace OA.Domain
         public async Task<IEnumerable<OAPersonContractAggr>> GetListAsync(Guid teamId)
         {
             var result = new List<OAPersonContractAggr>();
+            var companySetting = await _settingRepository.GetAsync(w => w.Type == OAPersonSettingTypeEnum.ContractInformation);
             var data = await _contactRepository.GetListByTeamAsync(teamId, string.Empty);
-            data.ForEach(e =>
+
+            if (companySetting != null)
             {
-                if (e.LeaveDate == null)
+                var fields = await _settingFieldRepository.GetListBySettingAsync(companySetting.Id);
+                if (!fields.Any()) return result;
+
+                data.ForEach(e =>
                 {
-                    if (!e.ExtendInformationJson.IsNullOrEmpty())
+                    if (e.LeaveDate != null) return;
+                    if (e.ExtendInformationJson.IsNullOrEmpty()) return;
+                    var infos = e.ExtendInformationJson.FromJson<List<OAPersonExtenInformationFieldVo>>().OrderBy(o => o.Name);
+
+                    var endDateName = new OAPersonContractEndDateVo().Name;
+                    var starDateName = new OAPersonContractStartDateVo().Name;
+                    var companyName = new OAPersonContractCompanyVo().Name;
+                    var typeName = new OAPersonContractTypeVo().Name;
+
+                    var total = fields.Where(w => w.Name.StartsWith(endDateName)).Count();
+                    for (var i = 0; i < total; i++)
                     {
-                        var infos = e.ExtendInformationJson.FromJson<List<OAPersonExtenInformationFieldVo>>();
-                        var starDate = infos.FirstOrDefault(w => w.Name == new OAPersonContractStartDateVo().Name);
-                        var endDate = infos.FirstOrDefault(w => w.Name == new OAPersonContractEndDateVo().Name);
-                        var company = infos.FirstOrDefault(w => w.Name == new OAPersonContractCompanyVo().Name);
-                        var type = infos.FirstOrDefault(w => w.Name == new OAPersonContractTypeVo().Name);
+                        var suffix = i == 0 ? "" : i.ToString();
+                        var endDate = infos.FirstOrDefault(w => w.Name == endDateName.Append(suffix));
+
                         if (endDate != null && !endDate.Value.IsNullOrEmpty() && (endDate.Value.TryDateTime() - DateTime.Now).TotalDays <= 60)
                         {
                             var contractInfo = _mapper.Map<OAPersonContractAggr>(e);
+                            var starDate = infos.FirstOrDefault(w => w.Name == starDateName.Append(suffix));
+                            var company = infos.FirstOrDefault(w => w.Name == companyName.Append(suffix));
+                            var type = infos.FirstOrDefault(w => w.Name == typeName.Append(suffix));
                             if (starDate != null)
                                 contractInfo.ContractFirstDate = starDate.Value.TryDateTime();
                             if (endDate != null)
@@ -64,8 +86,8 @@ namespace OA.Domain
                             result.Add(contractInfo);
                         }
                     }
-                }
-            });
+                });
+            }
             return result;
         }
     }

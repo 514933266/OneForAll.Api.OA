@@ -16,12 +16,10 @@ namespace OA.Domain.ValueObjects
             Name = "School";
             Text = "毕业院校";
             Placeholder = "请填写毕业院校";
-            IsRequired = false;
-            IsEnableRequired = true;
-            IsEmployeeEditable = false;
-            IsEnableEmployeeEditable = true;
-            IsEnableEmployeeVisiable = true;
+            IsDefault = true;
+            IsRequired = true;
             IsEntryFileVisiable = true;
+            IsEnableEmployeeVisiable = true;
             IsEnableEntryFileVisiable = true;
         }
     }

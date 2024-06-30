@@ -17,6 +17,8 @@ using OA.Repository;
 using Microsoft.EntityFrameworkCore;
 using IdentityModel;
 using OneForAll.Core.Upload;
+using Microsoft.AspNetCore.Routing.Constraints;
+using System.IO;
 
 namespace OA.Host.Controllers
 {
@@ -70,6 +72,7 @@ namespace OA.Host.Controllers
             switch (msg.ErrType)
             {
                 case BaseErrType.Success: return msg.Success("资料更新成功");
+                case BaseErrType.DataNotFound: return msg.Fail("资料已确认或丢失");
                 default: return msg.Fail("资料更新失败");
             }
         }
@@ -78,20 +81,22 @@ namespace OA.Host.Controllers
         /// 上传文件
         /// </summary>
         /// <param name="id">人员id</param>
+        /// <param name="field">对应的字段名称</param>
         /// <param name="form">文件流</param>
         /// <returns>结果（头像的路径会在Data中输出）</returns>
         [HttpPost]
         [Route("{id}/Files")]
-        public async Task<BaseMessage> UploadFileAsync(Guid id, [FromForm] IFormCollection form)
+        public async Task<BaseMessage> UploadFileAsync([FromRoute] Guid id, [FromForm] OAPersonSettingFieldForm field, [FromForm] IFormCollection form)
         {
             var msg = new BaseMessage();
             if (form.Files.Count > 0)
             {
                 var file = form.Files.FirstOrDefault();
 
-                var callbacks = await _service.UploadFileAsync(id, file.FileName, file.OpenReadStream());
+                var fileName = field.Text + Path.GetExtension(file.FileName);
+                var callbacks = await _service.UploadFileAsync(id, fileName, file.OpenReadStream());
 
-                msg.Data = new { Username = LoginUser.UserName, Result = callbacks };
+                msg.Data = new { Field = field, Result = callbacks };
 
                 switch (callbacks.State)
                 {

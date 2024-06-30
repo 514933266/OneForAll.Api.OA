@@ -19,7 +19,7 @@ namespace OA.Host.Controllers
     /// 离职登记
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleType.PUBLIC)]
+    [Authorize(Roles = UserRoleType.ADMIN)]
     public class OAPersonLeavesController : BaseController
     {
         private readonly IOAPersonLeaveService _service;
@@ -65,26 +65,6 @@ namespace OA.Host.Controllers
                 case BaseErrType.Success: return msg.Success("添加成功");
                 case BaseErrType.DataExist: return msg.Fail("数据已存在");
                 default: return msg.Fail("添加失败");
-            }
-        }
-
-        /// <summary>
-        /// 修改
-        /// </summary>
-        /// <param name="form">表单</param>
-        /// <returns>结果</returns>
-        [HttpPut]
-        [CheckPermission(Action = ConstPermission.EnterView)]
-        public async Task<BaseMessage> UpdateAsync([FromBody] OAPersonLeaveForm form)
-        {
-            var msg = new BaseMessage();
-            msg.ErrType = await _service.UpdateAsync(form);
-
-            switch (msg.ErrType)
-            {
-                case BaseErrType.Success: return msg.Success("修改成功");
-                case BaseErrType.DataExist: return msg.Fail("数据已存在");
-                default: return msg.Fail("修改失败");
             }
         }
 
