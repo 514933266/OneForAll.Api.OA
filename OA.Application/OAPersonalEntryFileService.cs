@@ -5,14 +5,11 @@ using OA.Domain.AggregateRoots;
 using OA.Domain.Aggregates;
 using OA.Domain.Interfaces;
 using OA.Domain.Models;
-using OA.Domain.Repositorys;
 using OneForAll.Core;
 using OneForAll.Core.UploadFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OA.Application
@@ -24,17 +21,16 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonEntryFileManager _manager;
-
-        private readonly IOAPersonEntryRepository _repository;
+        private readonly IOAPersonEntryFileQueryService _entryFileQueryService;
 
         public OAPersonalEntryFileService(
             IMapper mapper,
             IOAPersonEntryFileManager manager,
-            IOAPersonEntryRepository repository)
+            IOAPersonEntryFileQueryService entryFileQueryService)
         {
             _mapper = mapper;
             _manager = manager;
-            _repository = repository;
+            _entryFileQueryService = entryFileQueryService;
         }
 
         /// <summary>
@@ -44,7 +40,7 @@ namespace OA.Application
         /// <returns>列表</returns>
         public async Task<OAPersonalEntryFileDto> GetAsync(Guid id)
         {
-            var data = await _repository.GetIQFAsync(id);
+            var data = await _entryFileQueryService.GetAsync(id);
             return _mapper.Map<OAPersonEntry, OAPersonalEntryFileDto>(data);
         }
 
@@ -55,7 +51,7 @@ namespace OA.Application
         /// <returns>组织架构树</returns>
         public async Task<IEnumerable<OAPersonSettingDto>> GetListSettingAsync(Guid id)
         {
-            var data = await _manager.GetListSettingAsync(id);
+            var data = await _entryFileQueryService.GetListSettingAsync(id);
             return _mapper.Map<IEnumerable<OAPersonSettingAggr>, IEnumerable<OAPersonSettingDto>>(data);
         }
 

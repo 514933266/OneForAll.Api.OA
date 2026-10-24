@@ -16,31 +16,6 @@ namespace OA.Domain.Interfaces
     public interface IOAPersonEntryManager
     {
         /// <summary>
-        /// 获取分页
-        /// </summary>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="pageSize">页数</param>
-        /// <param name="key">关键字</param>
-        /// <returns>分页列表</returns>
-        Task<PageList<OAPersonEntry>> GetPageAsync(int pageIndex, int pageSize, string key);
-
-        /// <summary>
-        /// 查询列表
-        /// </summary>
-        /// <param name="name">姓名</param>
-        /// <param name="creatorName">创建人</param>
-        /// <param name="mobilePhone">手机号码</param>
-        /// <param name="startDate">开始入职日期</param>
-        /// <param name="endDate">开始入职日期</param>
-        /// <returns>列表</returns>
-        Task<IEnumerable<OAPersonEntry>> GetListAsync(
-             string name,
-             string creatorName,
-             string mobilePhone,
-             DateTime? startDate,
-             DateTime? endDate);
-
-        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="form">表单</param>
@@ -74,5 +49,13 @@ namespace OA.Domain.Interfaces
         /// <param name="form">表单</param>
         /// <returns>结果</returns>
         Task<BaseErrType> UpdatePersonFileAsync(OAPersonalEntryFileForm form);
+
+        /// <summary>
+        /// 由入职登记与到岗表单构建人员档案表单（含附加信息默认值规则）
+        /// </summary>
+        /// <param name="entry">入职登记</param>
+        /// <param name="form">到岗表单</param>
+        /// <returns>人员档案表单</returns>
+        Task<OAPersonForm> BuildPersonFormAsync(OAPersonEntryAggr entry, OAPersonEntryConfirmForm form);
     }
 }

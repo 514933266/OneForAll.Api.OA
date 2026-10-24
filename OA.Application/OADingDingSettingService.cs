@@ -5,7 +5,6 @@ using OA.Domain.AggregateRoots;
 using OA.Domain.Interfaces;
 using OA.Domain.Models;
 using OneForAll.Core;
-using OneForAll.EFCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

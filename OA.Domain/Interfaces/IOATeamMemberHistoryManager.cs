@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using OneForAll.Core;
 using OA.Domain.Models;
+using OA.Domain.Aggregates;
 using OA.Domain.AggregateRoots;
 
 namespace OA.Domain.Interfaces
@@ -14,18 +15,6 @@ namespace OA.Domain.Interfaces
     /// </summary>
     public interface IOATeamMemberHistoryManager
     {
-        /// <summary>
-        /// 获取列表
-        /// </summary>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="pageSize">页数</param>
-        /// <param name="teamId"></param>
-        /// <param name="key"></param>
-        /// <param name="startDate">开始日期</param>
-        /// <param name="endDate">结束日期</param>
-        /// <returns>结果</returns>
-        Task<PageList<OATeamMemberHistory>> GetPageAsync(int pageIndex, int pageSize, Guid teamId, string key, DateTime? startDate, DateTime? endDate);
-
         /// <summary>
         /// 添加入职历史
         /// </summary>
@@ -46,5 +35,13 @@ namespace OA.Domain.Interfaces
         /// <param name="form">表单</param>
         /// <returns>结果</returns>
         Task<BaseErrType> AddAsync(OATeamMemberDeleteForm form);
+
+        /// <summary>
+        /// 办理离职时批量生成异动日志
+        /// </summary>
+        /// <param name="members">成员列表（含团队）</param>
+        /// <param name="leave">离职登记</param>
+        /// <returns>结果</returns>
+        Task<BaseErrType> AddRangeOnLeaveAsync(IEnumerable<OATeamMemberAggr> members, OAPersonLeave leave);
     }
 }

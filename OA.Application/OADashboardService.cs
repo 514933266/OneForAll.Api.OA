@@ -1,17 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using OA.Application.Dtos;
 using OA.Application.Interfaces;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Enums;
 using OA.Domain.Interfaces;
-using OA.Domain.Repositorys;
+using OA.Domain.Models;
 using OneForAll.Core;
-using OneForAll.Core.Extension;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OA.Application
@@ -19,29 +15,20 @@ namespace OA.Application
     /// <summary>
     /// 仪表盘
     /// </summary>
-    public class OADashboardService : BaseService, IOADashboardService
+    public class OADashboardService : IOADashboardService
     {
         private readonly IMapper _mapper;
-        private readonly IOAPersonManager _manager;
         private readonly IOATeamMemberManager _memberManager;
+        private readonly IOAPersonQueryService _personQueryService;
 
-        private readonly IOAPersonRepository _repository;
-        private readonly IOATeamRepository _teamRepository;
-        private readonly IOATeamPersonContactRepository _contactRepository;
         public OADashboardService(
             IMapper mapper,
-            IHttpContextAccessor httpContextAccessor,
-            IOAPersonManager manager,
             IOATeamMemberManager memberManager,
-            IOAPersonRepository repository,
-            IOATeamRepository teamRepository,
-            IOATeamPersonContactRepository contactRepository) : base(httpContextAccessor)
+            IOAPersonQueryService personQueryService)
         {
-            _manager = manager;
+            _mapper = mapper;
             _memberManager = memberManager;
-            _repository = repository;
-            _teamRepository = teamRepository;
-            _contactRepository = contactRepository;
+            _personQueryService = personQueryService;
         }
 
         /// <summary>
@@ -50,7 +37,7 @@ namespace OA.Application
         /// <returns>分页列表</returns>
         public async Task<IEnumerable<OAPersonBasicInfoDto>> GetListNewPersonAsync()
         {
-            var data = await _repository.GetListNewEntryAsync();
+            var data = await _personQueryService.GetListNewEntryAsync();
             if (data.Any())
             {
                 return _mapper.Map<IEnumerable<OAPerson>, IEnumerable<OAPersonBasicInfoDto>>(data);
@@ -67,45 +54,13 @@ namespace OA.Application
         /// <returns></returns>
         public async Task<OAPersonStatisticV2Dto> GetStatisticsAsync()
         {
-            var teamCount = 0;
-            var groupCount = 0;
-            var data = await _manager.GetListAsync(string.Empty, OAPersonOnJobStatusEnum.OnJob);
-            var contacts = await _contactRepository.GetListByUserAsync(LoginUser.Id.TryGuid());
-            if (contacts.Any())
-            {
-                var teamIds = new List<Guid>();
-                var groupIds = new List<Guid>();
-                var teams = await _teamRepository.GetListValidANTAsync();
-                var tids = contacts.Where(w => w.IsLeader).Select(s => s.OATeamId).ToList();
-                var gids = contacts.Where(w => !w.IsLeader).Select(s => s.OATeamId).ToList();
-                tids.ForEach(e =>
-                {
-                    var children = teams.FindChildren(e);
-                    teamIds.AddRange(children.Select(s => s.Id));
-                });
-                teamIds.AddRange(tids);
-                gids.ForEach(e =>
-                {
-                    var children = teams.FindChildren(e);
-                    groupIds.AddRange(children.Select(s => s.Id));
-                });
-                groupIds.AddRange(gids);
-                if (teamIds.Any())
-                    teamCount = await _contactRepository.GetCountByTeamAsync(teamIds);
-                if (groupIds.Any())
-                    groupCount = await _contactRepository.GetCountByTeamAsync(groupIds);
-            }
-
-            var result = new OAPersonStatisticV2Dto()
-            {
-                TotalOnJobCount = data.Count(),
-                NormalCount = data.Where(w => w.EmployeeType == "全职").Count(),
-                InternCount = data.Where(w => w.EmployeeType == "兼职").Count(),
-                TrialCount = data.Where(w => w.EmployeeStatus == "实习生").Count(),
-                TeamCount = teamCount,
-                GroupCount = groupCount
-            };
-            return result;
+            // 人员统计口径与管辖部门/群组人数均由领域层给出
+            var persons = await _personQueryService.GetListAsync(string.Empty, OAPersonOnJobStatusEnum.OnJob);
+            var statistic = OAPersonStatistic.Count(persons);
+            var led = await _memberManager.GetLedCountAsync();
+            statistic.TeamCount = led.TeamCount;
+            statistic.GroupCount = led.GroupCount;
+            return _mapper.Map<OAPersonStatistic, OAPersonStatisticV2Dto>(statistic);
         }
     }
 }

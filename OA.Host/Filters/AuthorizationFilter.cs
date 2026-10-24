@@ -11,6 +11,7 @@ using OneForAll.Core;
 using OneForAll.Core.Extension;
 using OA.HttpService.Interfaces;
 using OA.Host.Models;
+using OA.Public.Models;
 using OneForAll.Core.Security;
 
 namespace OA.Host.Filters

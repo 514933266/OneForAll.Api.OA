@@ -19,15 +19,15 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonTeamInfoManager _manager;
-        private readonly IOATeamManager _teamManager;
+        private readonly IOATeamQueryService _teamQueryService;
         public OAPersonTeamInfoService(
             IMapper mapper,
             IOAPersonTeamInfoManager manager,
-            IOATeamManager teamManager)
+            IOATeamQueryService teamQueryService)
         {
             _mapper = mapper;
             _manager = manager;
-            _teamManager = teamManager;
+            _teamQueryService = teamQueryService;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace OA.Application
         /// <returns>人员列表</returns>
         public async Task<IEnumerable<OAPersonTeamInfoDto>> GetListAsync(string key)
         {
-            var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.None);
+            var teams = await _teamQueryService.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.None);
             var data = await _manager.GetListAsync(teams, key);
             return _mapper.Map<IEnumerable<OAPersonTeamInfoAggr>, IEnumerable<OAPersonTeamInfoDto>>(data);
         }
@@ -49,7 +49,7 @@ namespace OA.Application
         /// <returns>人员列表</returns>
         public async Task<IEnumerable<OAPersonTeamInfoDto>> GetListBasicOptionAsync(string key)
         {
-            var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.None);
+            var teams = await _teamQueryService.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.None);
             var data = await _manager.GetListAsync(teams, key);
             return _mapper.Map<IEnumerable<OAPersonTeamInfoAggr>, IEnumerable<OAPersonTeamInfoDto>>(data);
         }
@@ -61,7 +61,7 @@ namespace OA.Application
         /// <returns>实体</returns>
         public async Task<OAPersonTeamInfoDto> GetAsync(Guid id)
         {
-            var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.None);
+            var teams = await _teamQueryService.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.None);
             var data = await _manager.GetAsync(teams, id);
             return _mapper.Map<OAPersonTeamInfoAggr, OAPersonTeamInfoDto>(data);
         }

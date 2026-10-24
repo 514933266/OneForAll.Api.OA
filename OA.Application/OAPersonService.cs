@@ -23,14 +23,17 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonManager _manager;
+        private readonly IOAPersonQueryService _personQueryService;
         private readonly IOATeamMemberManager _memberManager;
         public OAPersonService(
             IMapper mapper,
             IOAPersonManager personManager,
+            IOAPersonQueryService personQueryService,
             IOATeamMemberManager memberManager)
         {
             _mapper = mapper;
             _manager = personManager;
+            _personQueryService = personQueryService;
             _memberManager = memberManager;
         }
 
@@ -44,7 +47,7 @@ namespace OA.Application
         /// <returns>分页列表</returns>
         public async Task<PageList<OAPersonDto>> GetPageAsync(int pageIndex, int pageSize, string key, OAPersonOnJobStatusEnum onJobStatus)
         {
-            var data = await _manager.GetPageAsync(pageIndex, pageSize, key, onJobStatus);
+            var data = await _personQueryService.GetPageAsync(pageIndex, pageSize, key, onJobStatus);
             var items = _mapper.Map<IEnumerable<OAPerson>, IEnumerable<OAPersonDto>>(data.Items);
             return new PageList<OAPersonDto>(data.Total, data.PageIndex, data.PageSize, items);
         }
@@ -57,7 +60,7 @@ namespace OA.Application
         /// <returns>分页列表</returns>
         public async Task<IEnumerable<OAPersonDto>> GetListAsync(string key, OAPersonOnJobStatusEnum onJobStatus)
         {
-            var data = await _manager.GetListAsync(key, onJobStatus);
+            var data = await _personQueryService.GetListAsync(key, onJobStatus);
             return _mapper.Map<IEnumerable<OAPerson>, IEnumerable<OAPersonDto>>(data);
         }
 
@@ -68,7 +71,7 @@ namespace OA.Application
         /// <returns>基础信息</returns>
         public async Task<OAPersonDto> GetAsync(Guid id)
         {
-            var data = await _manager.GetAsync(id);
+            var data = await _personQueryService.GetAsync(id);
             return _mapper.Map<OAPerson, OAPersonDto>(data);
         }
 
@@ -78,14 +81,10 @@ namespace OA.Application
         /// <returns></returns>
         public async Task<OAPersonStatisticDto> GetStatisticsAsync()
         {
-            var data = await _manager.GetListAsync(string.Empty, OAPersonOnJobStatusEnum.OnJob);
-            return new OAPersonStatisticDto()
-            {
-                TotalOnJobCount = data.Count(),
-                NormalCount = data.Where(w => w.EmployeeStatus == "正式员工").Count(),
-                InternCount = data.Where(w => w.EmployeeType == "实习生").Count(),
-                TrialCount = data.Where(w => w.EmployeeStatus == "试用员工").Count(),
-            };
+            var data = await _personQueryService.GetListAsync(string.Empty, OAPersonOnJobStatusEnum.OnJob);
+            // 统计口径由领域模型给出
+            var statistic = OAPersonStatistic.Count(data);
+            return _mapper.Map<OAPersonStatistic, OAPersonStatisticDto>(statistic);
         }
 
         /// <summary>

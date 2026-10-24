@@ -21,17 +21,20 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOATeamMemberManager _manager;
+        private readonly IOATeamMemberQueryService _memberQueryService;
         private readonly IOAPersonManager _personManager;
         private readonly IOATeamMemberHistoryManager _historyManager;
 
         public OATeamMemberService(
             IMapper mapper,
             IOATeamMemberManager manager,
+            IOATeamMemberQueryService memberQueryService,
             IOAPersonManager personManager,
             IOATeamMemberHistoryManager historyManager)
         {
             _mapper = mapper;
             _manager = manager;
+            _memberQueryService = memberQueryService;
             _personManager = personManager;
             _historyManager = historyManager;
         }
@@ -44,7 +47,7 @@ namespace OA.Application
         /// <returns>结果</returns>
         public async Task<IEnumerable<OATeamMemberDto>> GetListAsync(Guid teamId, bool deep)
         {
-            var data = await _manager.GetListAsync(teamId, deep);
+            var data = await _memberQueryService.GetListAsync(teamId, deep);
             return _mapper.Map<IEnumerable<OATeamMemberDto>>(data);
         }
 
@@ -54,7 +57,7 @@ namespace OA.Application
         /// <returns>成员列表</returns>
         public async Task<IEnumerable<OANoTeamPersonDto>> GetListNoTeamAsync()
         {
-            var data = await _manager.GetListNoTeamAsync();
+            var data = await _memberQueryService.GetListNoTeamAsync();
             return _mapper.Map<IEnumerable<OANoTeamPersonDto>>(data);
         }
 

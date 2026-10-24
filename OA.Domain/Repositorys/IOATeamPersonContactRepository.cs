@@ -71,5 +71,41 @@ namespace OA.Domain.Repositorys
         /// <param name="loginUserId">当前登录用户id</param>
         /// <returns>列表</returns>
         Task<IEnumerable<OAMidTeamPerson>> GetListByUserAsync(Guid loginUserId);
+
+        /// <summary>
+        /// 按团队id查询关联记录（跟踪）
+        /// </summary>
+        /// <param name="teamId">团队id</param>
+        /// <returns>列表</returns>
+        Task<List<OAMidTeamPerson>> GetListByTeamIdAsync(Guid teamId);
+
+        /// <summary>
+        /// 按团队id和人员id查询关联记录（跟踪）
+        /// </summary>
+        /// <param name="teamId">团队id</param>
+        /// <param name="personId">人员id</param>
+        /// <returns>关联记录</returns>
+        Task<OAMidTeamPerson> GetByTeamAndPersonAsync(Guid teamId, Guid personId);
+
+        /// <summary>
+        /// 按关联表主键id集合查询（跟踪）
+        /// </summary>
+        /// <param name="ids">关联表id集合</param>
+        /// <returns>列表</returns>
+        Task<List<OAMidTeamPerson>> GetListByIdsAsync(IEnumerable<Guid> ids);
+
+        /// <summary>
+        /// 按人员id集合查询关联记录（跟踪）
+        /// </summary>
+        /// <param name="personIds">人员id集合</param>
+        /// <returns>列表</returns>
+        Task<List<OAMidTeamPerson>> GetListByPersonIdsAsync(IEnumerable<Guid> personIds);
+
+        /// <summary>
+        /// 按单个人员id查询关联记录
+        /// </summary>
+        /// <param name="personId">人员id</param>
+        /// <returns>列表</returns>
+        Task<List<OAMidTeamPerson>> GetListByPersonIdAsync(Guid personId);
     }
 }

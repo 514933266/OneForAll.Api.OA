@@ -17,13 +17,6 @@ namespace OA.Domain.Interfaces
     public interface IOAPersonEntryFileManager
     {
         /// <summary>
-        /// 获取档案设置列表
-        /// </summary>
-        /// <param name="id">入职档案id</param>
-        /// <returns>列表</returns>
-        Task<IEnumerable<OAPersonSettingAggr>> GetListSettingAsync(Guid id);
-
-        /// <summary>
         /// 填写入职档案
         /// </summary>
         /// <param name="form">表单</param>

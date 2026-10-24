@@ -17,6 +17,8 @@ namespace OA.Host.Profiles
         public OAPersonEntryProfile()
         {
             CreateMap<OAPersonEntry, OAPersonEntryDto>();
+            CreateMap<OAPersonEntry, OAPersonEntryAggr>();
+            CreateMap<OAPersonEntryAggr, OAPersonEntryDto>().IncludeBase<OAPersonEntry, OAPersonEntryDto>();
             CreateMap<OAPersonEntry, OAPersonalEntryFileDto>()
                 .ForMember(t => t.ExtendInformations, a => a.MapFrom(e => e.ExtendInformationJson.FromJson<List<OAPersonExtenInformationFieldVo>>()));
 

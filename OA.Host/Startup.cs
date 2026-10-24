@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using OA.Domain.Interfaces;
 using OA.Host.Filters;
 using OA.Host.Models;
 using OA.Host.Providers;
@@ -36,6 +37,7 @@ namespace OA.Host
         const string CORS = "Cors";
         const string AUTH = "Auth";
         private readonly string QUARTZ = "Quartz";
+        private readonly string JOB_LOCK = "JobLock";
         const string BASE_HOST = "OA.Host";
         const string BASE_APPLICATION = "OA.Application";
         const string BASE_DOMAIN = "OA.Domain";
@@ -103,6 +105,8 @@ namespace OA.Host
 
             // 将 HttpServiceConfig 作为单例注入，供后续使用
             services.AddSingleton<HttpServiceConfig>();
+            // 将 HttpServiceLogConfig 作为单例注入
+            services.AddSingleton<HttpServiceLogConfig>();
 
             #endregion
 
@@ -145,8 +149,12 @@ namespace OA.Host
 
             // 此区域预留用于手动注册其他依赖项
             services.AddSingleton<HttpServiceConfig>();
+            // 将 HttpServiceLogConfig 作为单例注入
+            services.AddSingleton<HttpServiceLogConfig>();
             services.AddSingleton<IUploader, Uploader>();
             services.AddScoped<ITenantProvider, TenantProvider>();
+            // 当前登录用户端口：领域层通过 ICurrentUser 获取登录态，不直接依赖 IHttpContextAccessor
+            services.AddScoped<ICurrentUser, CurrentUser>();
 
             #endregion
 
@@ -175,6 +183,11 @@ namespace OA.Host
             // 读取 Quartz 定时任务配置
             var quartzConfig = Configuration.GetSection(QUARTZ).Get<QuartzScheduleJobConfig>();
             services.AddSingleton(quartzConfig); // 注册配置为单例
+
+            // 定时任务运行锁配置（调度中心并发检查异常时是否放行执行）
+            var jobLockConfig = new JobLockConfig();
+            Configuration.GetSection(JOB_LOCK).Bind(jobLockConfig);
+            services.AddSingleton(jobLockConfig);
 
             // 注册自定义 Job 工厂和调度器工厂
             services.AddSingleton<IJobFactory, ScheduleJobFactory>();
@@ -219,9 +232,14 @@ namespace OA.Host
                 .Where(t => t.Name.EndsWith("Service"))
                 .AsImplementedInterfaces();
 
-            // 领域层
+            // 领域层（命令：Manager）
             builder.RegisterAssemblyTypes(Assembly.Load(BASE_DOMAIN))
                 .Where(t => t.Name.EndsWith("Manager"))
+                .AsImplementedInterfaces();
+
+            // 领域层（查询：QueryService）
+            builder.RegisterAssemblyTypes(Assembly.Load(BASE_DOMAIN))
+                .Where(t => t.Name.EndsWith("QueryService"))
                 .AsImplementedInterfaces();
 
             // 仓储层

@@ -3,14 +3,9 @@ using OA.Application.Dtos;
 using OA.Application.Interfaces;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Interfaces;
-using OA.Domain.Repositorys;
-using OA.Public.Models;
 using OneForAll.Core.Extension;
 using OneForAll.Core.OAuth;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OA.Application
@@ -21,11 +16,11 @@ namespace OA.Application
     public class OAPersonalTeamHistoryService : IOAPersonalTeamHistoryService
     {
         private readonly IMapper _mapper;
-        private readonly IOATeamMemberHistoryRepository _repository;
-        public OAPersonalTeamHistoryService(IMapper mapper, IOATeamMemberHistoryRepository repository)
+        private readonly IOATeamMemberHistoryQueryService _queryService;
+        public OAPersonalTeamHistoryService(IMapper mapper, IOATeamMemberHistoryQueryService queryService)
         {
             _mapper = mapper;
-            _repository = repository;
+            _queryService = queryService;
         }
 
         /// <summary>
@@ -35,7 +30,7 @@ namespace OA.Application
         /// <returns>列表</returns>
         public async Task<IEnumerable<OATeamMemberHistoryDto>> GetListAsync(LoginUser loginUser)
         {
-            var data = await _repository.GetListByUserIdAsync(loginUser.Id.TryGuid());
+            var data = await _queryService.GetListByUserIdAsync(loginUser.Id.TryGuid());
             return _mapper.Map<IEnumerable<OATeamMemberHistory>, IEnumerable<OATeamMemberHistoryDto>>(data);
         }
     }

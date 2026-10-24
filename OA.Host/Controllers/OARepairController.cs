@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using OneForAll.Core;
-using OA.Domain.Interfaces;
 using OneForAll.Core.OAuth;
+using OA.Application.Interfaces;
 
 namespace OA.Host.Controllers
 {
@@ -16,10 +16,10 @@ namespace OA.Host.Controllers
     [Authorize(Roles = UserRoleType.Ruler)]
     public class OARepairController : BaseController
     {
-        private readonly IOARepairManager _manager;
-        public OARepairController(IOARepairManager manager)
+        private readonly IOARepairService _service;
+        public OARepairController(IOARepairService service)
         {
-            _manager = manager;
+            _service = service;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace OA.Host.Controllers
         public async Task<BaseMessage> RepairPersonInfomation([FromQuery] Guid tenantId)
         {
             var msg = new BaseMessage();
-            msg.ErrType = await _manager.RepairPersonInfomation(tenantId);
+            msg.ErrType = await _service.RepairPersonInfomation(tenantId);
 
             switch (msg.ErrType)
             {

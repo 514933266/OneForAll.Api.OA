@@ -48,6 +48,16 @@ namespace OA.Repository
             return await DbSet.IgnoreQueryFilters().Where(w => w.SysTenantId == tenantId).ToListAsync();
         }
 
+        /// <summary>
+        /// 查询指定类型的配置
+        /// </summary>
+        /// <param name="type">配置类型</param>
+        /// <returns>配置</returns>
+        public async Task<OAPersonSetting> GetByTypeAsync(OAPersonSettingTypeEnum type)
+        {
+            return await DbSet.FirstOrDefaultAsync(w => w.Type == type);
+        }
+
         #endregion
 
         #region 其他

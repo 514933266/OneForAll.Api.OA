@@ -14,13 +14,23 @@ namespace OA.Domain.ValueObjects
     /// </summary>
     public class OAPersonEmployeeStatusVo : OAPersonDefaultFieldVo
     {
+        /// <summary>
+        /// 正式员工
+        /// </summary>
+        public const string ValueNormal = "正式员工";
+
+        /// <summary>
+        /// 试用员工
+        /// </summary>
+        public const string ValueTrial = "试用员工";
+
         public OAPersonEmployeeStatusVo()
         {
             Name = "Status";
             Text = "员工状态";
             Placeholder = "请选择员工状态";
             Type = OAPersonSettingFieldTypeEnum.Select;
-            Value = "正式员工";
+            Value = ValueNormal;
             TypeDetail = GetListSelection().ToJson();
             IsDefault = true;
             IsShowEnabled = true;
@@ -39,8 +49,8 @@ namespace OA.Domain.ValueObjects
         {
             return new List<OAPersonDefaultSelectVo>()
             {
-                new OAPersonDefaultSelectVo() { Name = "正式员工", Value = "正式员工" },
-                new OAPersonDefaultSelectVo() { Name = "试用员工", Value = "试用员工" }
+                new OAPersonDefaultSelectVo() { Name = ValueNormal, Value = ValueNormal },
+                new OAPersonDefaultSelectVo() { Name = ValueTrial, Value = ValueTrial }
             };
         }
 
@@ -50,7 +60,7 @@ namespace OA.Domain.ValueObjects
         /// <returns>选项</returns>
         public static OAPersonDefaultSelectVo GetDefaultSelection()
         {
-            return GetListSelection().FirstOrDefault(w => w.Name == "正式员工");
+            return GetListSelection().FirstOrDefault(w => w.Name == ValueNormal);
         }
     }
 }

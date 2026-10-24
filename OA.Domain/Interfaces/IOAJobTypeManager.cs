@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +14,6 @@ namespace OA.Domain.Interfaces
     /// </summary>
     public interface IOAJobTypeManager
     {
-        /// <summary>
-        /// 获取列表
-        /// </summary>
-        /// <param name="key">关键字</param>
-        /// <returns>列表</returns>
-        Task<IEnumerable<OAJobType>> GetListAsync(string key);
 
         /// <summary>
         /// 创建系统默认职位分类

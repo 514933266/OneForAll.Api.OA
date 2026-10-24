@@ -15,20 +15,6 @@ namespace OA.Domain.Interfaces
     public interface IOATeamMemberManager
     {
         /// <summary>
-        /// 查询在职列表（含人员基础信息）
-        /// </summary>
-        /// <param name="teamId">组织id</param>
-        /// <param name="deep">是否递归</param>
-        /// <returns>成员列表</returns>
-        Task<IEnumerable<OATeamMemberAggr>> GetListAsync(Guid teamId, bool deep);
-
-        /// <summary>
-        /// 查询未加入团队列表
-        /// </summary>
-        /// <returns>成员列表</returns>
-        Task<IEnumerable<OAPerson>> GetListNoTeamAsync();
-
-        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="entity">实体</param>
@@ -111,5 +97,11 @@ namespace OA.Domain.Interfaces
         /// <param name="data">Excel人员列表</param>
         /// <returns>结果</returns>
         Task<BaseMessage> ImportExcelAsync(Guid teamId, IEnumerable<OATeamMemberImportForm> data);
+
+        /// <summary>
+        /// 统计当前登录用户管辖的部门与群组人数
+        /// </summary>
+        /// <returns>管辖人数</returns>
+        Task<OALedTeamCount> GetLedCountAsync();
     }
 }

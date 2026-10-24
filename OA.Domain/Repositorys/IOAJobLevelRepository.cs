@@ -23,5 +23,26 @@ namespace OA.Domain.Repositorys
         /// <param name="key">关键字</param>m>
         /// <returns>分页列表</returns>
         Task<PageList<OAJobLevel>> GetPageAsync(int pageIndex, int pageSize, string key);
+
+        /// <summary>
+        /// 按名称查询
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>实体</returns>
+        Task<OAJobLevel> GetByNameAsync(string name);
+
+        /// <summary>
+        /// 按名称模糊查询
+        /// </summary>
+        /// <param name="key">关键字</param>
+        /// <returns>列表</returns>
+        Task<List<OAJobLevel>> GetListByNameContainsAsync(string key);
+
+        /// <summary>
+        /// 按id集合查询
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        Task<List<OAJobLevel>> GetListByIdsAsync(IEnumerable<Guid> ids);
     }
 }

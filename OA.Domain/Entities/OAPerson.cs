@@ -55,14 +55,14 @@ namespace OA.Domain.AggregateRoots
         /// </summary>
         [Required]
         [StringLength(20)]
-        public string EmployeeType { get; set; } = "全职";
+        public string EmployeeType { get; set; } = OAPersonEmployeeTypeVo.ValueFullTime;
 
         /// <summary>
         /// 员工状态
         /// </summary>
         [Required]
         [StringLength(20)]
-        public string EmployeeStatus { get; set; } = "正式员工";
+        public string EmployeeStatus { get; set; } = OAPersonEmployeeStatusVo.ValueNormal;
 
         /// <summary>
         /// 头像

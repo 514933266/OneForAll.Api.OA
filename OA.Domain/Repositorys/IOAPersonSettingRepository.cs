@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using OneForAll.EFCore;
 using OA.Domain.AggregateRoots;
+using OA.Domain.Enums;
 
 namespace OA.Domain.Repositorys
 {
@@ -28,6 +29,13 @@ namespace OA.Domain.Repositorys
         /// <param name="tenantId">租户Id</param>
         /// <returns>列表</returns>
         Task<IEnumerable<OAPersonSetting>> GetListByTenantIQFAsync(Guid tenantId);
+
+        /// <summary>
+        /// 查询指定类型的配置
+        /// </summary>
+        /// <param name="type">配置类型</param>
+        /// <returns>配置</returns>
+        Task<OAPersonSetting> GetByTypeAsync(OAPersonSettingTypeEnum type);
 
         #endregion
 

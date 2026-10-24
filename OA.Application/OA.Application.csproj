@@ -15,7 +15,6 @@
     <ProjectReference Include="..\OA.Domain\OA.Domain.csproj" />
     <ProjectReference Include="..\OA.HttpSevice\OA.HttpService.csproj" />
     <ProjectReference Include="..\OA.Public\OA.Public.csproj" />
-    <ProjectReference Include="..\OA.Repository\OA.Repository.csproj" />
   </ItemGroup>
 
 </Project>

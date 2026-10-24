@@ -46,5 +46,16 @@ namespace OA.Repository
                 .Where(w => w.Name.Contains(name))
                 .FirstOrDefaultAsync();
         }
+
+        /// <summary>
+        /// 按名称精确查询实体
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>实体</returns>
+        public async Task<OATeamType> GetByNameExactAsync(string name)
+        {
+            return await DbSet
+                .FirstOrDefaultAsync(w => w.Name == name);
+        }
     }
 }

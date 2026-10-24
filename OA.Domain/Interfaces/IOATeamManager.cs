@@ -16,27 +16,6 @@ namespace OA.Domain.Interfaces
     public interface IOATeamManager
     {
         /// <summary>
-        /// 获取列表树
-        /// </summary>
-        /// <param name="parentId">上级id</param>
-        /// <param name="type">类型</param>
-        /// <param name="deep">是否深度检索</param>
-        /// <param name="scope">范围 -1全部 0有效 1被删除数据</param>
-        /// <returns>列表</returns>
-        Task<IEnumerable<OATeamTreeAggr>> GetListAsync(
-            Guid parentId,
-            string type,
-            bool deep,
-            OATeamSearchScopeEnum scope);
-
-        /// <summary>
-        /// 获取指定组织
-        /// </summary>
-        /// <param name="id">组织id</param>
-        /// <returns>列表</returns>
-        Task<OATeam> GetAsync(Guid id);
-
-        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="entity">实体</param>

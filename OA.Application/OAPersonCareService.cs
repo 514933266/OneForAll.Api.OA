@@ -1,18 +1,11 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoMapper;
-using OneForAll.Core;
-using OA.Domain.Enums;
 using OA.Domain.Interfaces;
 using OA.Application.Dtos;
-using OA.Domain.AggregateRoots;
 using OA.Application.Interfaces;
 using OA.Domain.Aggregates;
-using OneForAll.Core.Extension;
 
 namespace OA.Application
 {
@@ -22,16 +15,14 @@ namespace OA.Application
     public class OAPersonCareService : IOAPersonBirthdayCareService
     {
         private readonly IMapper _mapper;
-        private readonly IOATeamManager _teamManager;
-        private readonly IOAPersonCareManager _manager;
+        private readonly IOAPersonCareQueryService _careQueryService;
+
         public OAPersonCareService(
             IMapper mapper,
-            IOATeamManager teamManager,
-            IOAPersonCareManager manager)
+            IOAPersonCareQueryService careQueryService)
         {
             _mapper = mapper;
-            _manager = manager;
-            _teamManager = teamManager;
+            _careQueryService = careQueryService;
         }
 
         /// <summary>
@@ -43,27 +34,9 @@ namespace OA.Application
         /// <returns>列表</returns>
         public async Task<IEnumerable<OAPersonBirthdayCareDto>> GetListBirthdayAsync(Guid teamId, DateTime startDate, DateTime endDate)
         {
-            var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.Valid);
-            var data = await _manager.GetListBirthdayAsync(teamId, startDate, endDate);
-
-            var items = _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OAPersonBirthdayCareDto>>(data);
-            foreach (var item in items)
-            {
-                var person = data.FirstOrDefault(w => w.Id == item.Id);
-                if (person != null && person.OATeam != null)
-                {
-                    item.Teams = new List<OAPersonTeamDto>()
-                    {
-                        new OAPersonTeamDto()
-                        {
-                             IsLeader = person.Contact.IsLeader,
-                             Name = person.OATeam.Name,
-                             Type = person.OATeam.Type
-                        }
-                    };
-                }
-            }
-            return items;
+            var data = await _careQueryService.GetListBirthdayAsync(teamId, startDate, endDate);
+            // 所在部门由 Profile 从聚合根导航属性投影
+            return _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OAPersonBirthdayCareDto>>(data);
         }
 
         /// <summary>
@@ -74,27 +47,9 @@ namespace OA.Application
         /// <returns>列表</returns>
         public async Task<IEnumerable<OAPersonCompanyCareDto>> GetListCompanyAsync(Guid teamId, DateTime date)
         {
-            var teams = await _teamManager.GetListAsync(Guid.Empty, string.Empty, true, OATeamSearchScopeEnum.Valid);
-            var data = await _manager.GetListCompanyAsync(teamId, date);
-
-            var items = _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OAPersonCompanyCareDto>>(data);
-            foreach (var item in items)
-            {
-                var person = data.FirstOrDefault(w => w.Id == item.Id);
-                if (person != null && person.OATeam != null)
-                {
-                    item.Teams = new List<OAPersonTeamDto>()
-                    {
-                        new OAPersonTeamDto()
-                        {
-                             IsLeader = person.Contact.IsLeader,
-                             Name = person.OATeam.Name,
-                             Type = person.OATeam.Type
-                        }
-                    };
-                }
-            }
-            return items;
+            var data = await _careQueryService.GetListCompanyAsync(teamId, date);
+            // 所在部门由 Profile 从聚合根导航属性投影
+            return _mapper.Map<IEnumerable<OATeamMemberAggr>, IEnumerable<OAPersonCompanyCareDto>>(data);
         }
     }
 }

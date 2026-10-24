@@ -300,5 +300,56 @@ namespace OA.Repository
 
             return await sql.ToListAsync();
         }
+
+        /// <summary>
+        /// 按团队id查询关联记录（跟踪）
+        /// </summary>
+        /// <param name="teamId">团队id</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAMidTeamPerson>> GetListByTeamIdAsync(Guid teamId)
+        {
+            return await DbSet.Where(w => w.OATeamId == teamId).ToListAsync();
+        }
+
+        /// <summary>
+        /// 按团队id和人员id查询关联记录（跟踪）
+        /// </summary>
+        /// <param name="teamId">团队id</param>
+        /// <param name="personId">人员id</param>
+        /// <returns>关联记录</returns>
+        public async Task<OAMidTeamPerson> GetByTeamAndPersonAsync(Guid teamId, Guid personId)
+        {
+            return await DbSet.FirstOrDefaultAsync(w => w.OATeamId == teamId && w.OAPersonId == personId);
+        }
+
+        /// <summary>
+        /// 按关联表主键id集合查询（跟踪）
+        /// </summary>
+        /// <param name="ids">关联表id集合</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAMidTeamPerson>> GetListByIdsAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(w => ids.Contains(w.Id)).ToListAsync();
+        }
+
+        /// <summary>
+        /// 按人员id集合查询关联记录（跟踪）
+        /// </summary>
+        /// <param name="personIds">人员id集合</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAMidTeamPerson>> GetListByPersonIdsAsync(IEnumerable<Guid> personIds)
+        {
+            return await DbSet.Where(w => personIds.Contains(w.OAPersonId)).ToListAsync();
+        }
+
+        /// <summary>
+        /// 按单个人员id查询关联记录
+        /// </summary>
+        /// <param name="personId">人员id</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAMidTeamPerson>> GetListByPersonIdAsync(Guid personId)
+        {
+            return await DbSet.Where(w => w.OAPersonId == personId).ToListAsync();
+        }
     }
 }

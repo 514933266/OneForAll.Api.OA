@@ -32,5 +32,19 @@ namespace OA.Domain.Repositorys
         /// <param name="key">关键字</param>
         /// <returns>列表</returns>
         Task<IEnumerable<OAJobAggr>> GetListAsync(bool? isEnabled, string key);
+
+        /// <summary>
+        /// 按名称查询
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>实体</returns>
+        Task<OAJob> GetByNameAsync(string name);
+
+        /// <summary>
+        /// 按id集合查询
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        Task<List<OAJob>> GetListByIdsAsync(IEnumerable<Guid> ids);
     }
 }

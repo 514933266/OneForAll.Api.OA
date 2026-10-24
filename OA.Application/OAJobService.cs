@@ -23,12 +23,15 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAJobManager _manager;
+        private readonly IOAJobQueryService _queryService;
         public OAJobService(
             IMapper mapper,
-            IOAJobManager manager)
+            IOAJobManager manager,
+            IOAJobQueryService queryService)
         {
             _mapper = mapper;
             _manager = manager;
+            _queryService = queryService;
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace OA.Application
         /// <returns>分页列表</returns>
         public async Task<IEnumerable<OAJobDto>> GetListAsync(bool? isEnabled, string key)
         {
-            var data = await _manager.GetListAsync(isEnabled, key);
+            var data = await _queryService.GetListAsync(isEnabled, key);
             return _mapper.Map<IEnumerable<OAJobAggr>, IEnumerable<OAJobDto>>(data);
         }
 

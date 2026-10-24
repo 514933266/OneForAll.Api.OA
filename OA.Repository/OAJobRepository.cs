@@ -101,5 +101,25 @@ namespace OA.Repository
                        });
             return await sql.ToListAsync();
         }
+
+        /// <summary>
+        /// 按名称查询
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>实体</returns>
+        public async Task<OAJob> GetByNameAsync(string name)
+        {
+            return await DbSet.FirstOrDefaultAsync(w => w.Name == name);
+        }
+
+        /// <summary>
+        /// 按id集合查询
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAJob>> GetListByIdsAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(w => ids.Contains(w.Id)).ToListAsync();
+        }
     }
 }

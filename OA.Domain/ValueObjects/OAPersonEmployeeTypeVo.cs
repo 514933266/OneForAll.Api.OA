@@ -15,18 +15,33 @@ namespace OA.Domain.ValueObjects
     /// </summary>
     public class OAPersonEmployeeTypeVo : OAPersonDefaultFieldVo
     {
+        /// <summary>
+        /// 全职
+        /// </summary>
+        public const string ValueFullTime = "全职";
+
+        /// <summary>
+        /// 实习生
+        /// </summary>
+        public const string ValueIntern = "实习生";
+
+        /// <summary>
+        /// 兼职
+        /// </summary>
+        public const string ValuePartTime = "兼职";
+
         public OAPersonEmployeeTypeVo()
         {
             Name = "EmployeeType";
             Text = "员工类型";
             Placeholder = "请选择员工类型";
             Type = OAPersonSettingFieldTypeEnum.Select;
-            Value = "全职";
+            Value = ValueFullTime;
             TypeDetail = new List<OAPersonDefaultSelectVo>()
             {
-                new OAPersonDefaultSelectVo() { Name = "全职", Value = "全职" },
-                new OAPersonDefaultSelectVo() { Name = "实习生", Value = "实习生" },
-                new OAPersonDefaultSelectVo() { Name = "兼职", Value = "兼职" },
+                new OAPersonDefaultSelectVo() { Name = ValueFullTime, Value = ValueFullTime },
+                new OAPersonDefaultSelectVo() { Name = ValueIntern, Value = ValueIntern },
+                new OAPersonDefaultSelectVo() { Name = ValuePartTime, Value = ValuePartTime },
                 new OAPersonDefaultSelectVo() { Name = "劳务派遣", Value = "劳务派遣" },
                 new OAPersonDefaultSelectVo() { Name = "退休返聘", Value = "退休返聘" }
             }.ToJson();

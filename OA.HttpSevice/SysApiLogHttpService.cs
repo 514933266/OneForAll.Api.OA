@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OA.HttpService.Interfaces;
 using OA.HttpService.Models;
+using OA.Public.Models;
 using OneForAll.Core;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,25 @@ using System.Threading.Tasks;
 
 namespace OA.HttpService
 {
-    // <summary>
-    /// Api日志
+    /// <summary>
+    /// 添加
     /// </summary>
     public class SysApiLogHttpService : BaseHttpService, ISysApiLogHttpService
     {
+        private readonly AuthConfig _authConfig;
         private readonly HttpServiceConfig _config;
+        private readonly HttpServiceLogConfig _logConfig;
 
         public SysApiLogHttpService(
+            AuthConfig authConfig,
             HttpServiceConfig config,
+            HttpServiceLogConfig logConfig,
             IHttpContextAccessor httpContext,
             IHttpClientFactory httpClientFactory) : base(httpContext, httpClientFactory)
         {
+            _authConfig = authConfig;
             _config = config;
+            _logConfig = logConfig;
         }
 
         /// <summary>
@@ -34,10 +41,25 @@ namespace OA.HttpService
         /// <returns></returns>
         public async Task AddAsync(SysApiLogRequest form)
         {
-            var client = GetHttpClient(_config.SysLog);
-            if (client != null && client.BaseAddress != null)
+            // 检查是否启用日志
+            if (!_logConfig.ApiLog)
+                return;
+
+            try
             {
-                await client.PostAsync("api/SysApiLogs", form, new JsonMediaTypeFormatter());
+                form.CreateTime = DateTime.UtcNow;
+                form.ModuleCode = _authConfig.ClientCode;
+                form.ModuleName = _authConfig.ClientName;
+
+                var client = GetHttpClient(_config.SysLog);
+                if (client != null && client.BaseAddress != null)
+                {
+                    await client.PostAsync("api/SysApiLogs", form, new JsonMediaTypeFormatter());
+                }
+            }
+            catch
+            {
+                // 忽略异常
             }
         }
     }

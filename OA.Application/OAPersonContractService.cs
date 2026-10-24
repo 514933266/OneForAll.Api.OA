@@ -4,7 +4,6 @@ using OA.Application.Interfaces;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Aggregates;
 using OA.Domain.Interfaces;
-using OA.Domain.Repositorys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +18,13 @@ namespace OA.Application
     public class OAPersonContractService : IOAPersonContractService
     {
         private readonly IMapper _mapper;
-        private readonly IOAPersonContractManager _manager;
+        private readonly IOAPersonContractQueryService _contractQueryService;
         public OAPersonContractService(
             IMapper mapper,
-            IOAPersonContractManager manager)
+            IOAPersonContractQueryService contractQueryService)
         {
             _mapper = mapper;
-            _manager = manager;
+            _contractQueryService = contractQueryService;
         }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace OA.Application
         /// <returns>列表</returns>
         public async Task<IEnumerable<OAPersonContractDto>> GetListAsync(Guid teamId)
         {
-            var data = await _manager.GetListAsync(teamId);
+            var data = await _contractQueryService.GetListAsync(teamId);
             return _mapper.Map<IEnumerable<OAPersonContractAggr>, IEnumerable<OAPersonContractDto>>(data);
         }
     }

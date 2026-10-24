@@ -1,23 +1,14 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoMapper;
 using OneForAll.Core;
-using OA.Domain.Enums;
 using OA.Domain.Interfaces;
 using OA.Application.Dtos;
-using OA.Domain.AggregateRoots;
 using OA.Application.Interfaces;
 using OA.Domain.Models;
 using OA.Domain.Aggregates;
-using OA.Domain.ValueObjects;
-using OA.Domain;
-using OneForAll.EFCore;
-using OA.Domain.Repositorys;
-using OneForAll.Core.Extension;
 
 namespace OA.Application
 {
@@ -28,34 +19,28 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonLeaveManager _manager;
+        private readonly IOAPersonLeaveQueryService _leaveQueryService;
         private readonly IOAPersonManager _personManager;
         private readonly IOATeamMemberManager _memberManager;
+        private readonly IOATeamMemberQueryService _memberQueryService;
+        private readonly IOATeamMemberHistoryManager _memberHistoryManager;
 
-        private readonly IOAPersonLeaveRepository _repository;
-        private readonly IOATeamRepository _teamRepository;
-        private readonly IOAPersonRepository _personRepository;
-        private readonly IOATeamPersonContactRepository _memberRepository;
-        private readonly IOATeamMemberHistoryRepository _historyRepository;
         public OAPersonLeaveService(
             IMapper mapper,
             IOAPersonLeaveManager manager,
+            IOAPersonLeaveQueryService leaveQueryService,
             IOAPersonManager personManager,
             IOATeamMemberManager memberManager,
-            IOATeamRepository teamRepository,
-            IOAPersonLeaveRepository repository,
-            IOAPersonRepository personRepository,
-            IOATeamPersonContactRepository memberRepository,
-            IOATeamMemberHistoryRepository historyRepository)
+            IOATeamMemberQueryService memberQueryService,
+            IOATeamMemberHistoryManager memberHistoryManager)
         {
             _mapper = mapper;
             _manager = manager;
+            _leaveQueryService = leaveQueryService;
             _personManager = personManager;
             _memberManager = memberManager;
-            _repository = repository;
-            _teamRepository = teamRepository;
-            _personRepository = personRepository;
-            _memberRepository = memberRepository;
-            _historyRepository = historyRepository;
+            _memberQueryService = memberQueryService;
+            _memberHistoryManager = memberHistoryManager;
         }
 
         /// <summary>
@@ -74,7 +59,7 @@ namespace OA.Application
              DateTime? startDate,
              DateTime? endDate)
         {
-            var data = await _manager.GetListAsync(name, creatorName, teamId, startDate, endDate);
+            var data = await _leaveQueryService.GetListAsync(name, creatorName, teamId, startDate, endDate);
             return _mapper.Map<IEnumerable<OAPersonLeaveAggr>, IEnumerable<OAPersonLeaveDto>>(data);
         }
 
@@ -116,7 +101,7 @@ namespace OA.Application
         /// <returns>结果</returns>
         public async Task<BaseErrType> ConfirmAsync(Guid id, OAPersonLeaveConfirmForm form)
         {
-            var data = await _repository.FindAsync(id);
+            var data = await _leaveQueryService.GetAsync(id);
             if (data == null)
                 return BaseErrType.DataNotFound;
 
@@ -124,38 +109,17 @@ namespace OA.Application
             var errType = await _personManager.LeaveAsync(new List<Guid>() { form.PersonId });
             if (errType == BaseErrType.Success)
             {
-                // 2. 移出团队
-                var historys = new List<OATeamMemberHistory>();
-                var members = await _memberRepository.GetListByPersonAsync(form.PersonId);
-
+                var members = await _memberQueryService.GetListByPersonAsync(form.PersonId);
                 if (members.Any())
                 {
                     var memberIds = members.Select(s => s.Id).ToList();
-                    var teamIds = members.Select(s => s.OATeam.Id).ToList();
-                    var teams = await _teamRepository.GetListANTAsync(teamIds);
-                    members.ForEach(e =>
-                    {
-                        var team = teams.FirstOrDefault(w => w.Id == e.OATeam.Id);
-                        historys.Add(new OATeamMemberHistory()
-                        {
-                            OAPersonId = e.Id,
-                            PersonName = e.Name,
-                            PersonJob = e.Job,
-                            OATeamId = team.Id,
-                            TeamName = team.Name,
-                            TargetOATeamId = team.Id,
-                            TargetTeamName = team.Name,
-                            Type = OATeamMemberTransferEnum.Leave,
-                            Remark = $"办理离职：{data.CreatorName}，原因：{data.Reason}，备注：{data.Remark}"
-                        });
-                    });
 
+                    // 2. 生成异动日志
+                    await _memberHistoryManager.AddRangeOnLeaveAsync(members, data);
+
+                    // 3. 移出团队
                     errType = await _memberManager.DeleteAsync(memberIds);
                 }
-
-                // 3. 生成异动日志
-                if (historys.Any())
-                    await _historyRepository.AddRangeAsync(historys);
             }
 
             // 4. 删除登记

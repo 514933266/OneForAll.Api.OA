@@ -14,13 +14,6 @@ namespace OA.Domain.Interfaces
     public interface IOATeamTypeManager
     {
         /// <summary>
-        /// 获取列表
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <returns>列表</returns>
-        Task<IEnumerable<OATeamType>> GetListAsync(string name);
-
-        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="entity">实体</param>

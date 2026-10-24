@@ -50,5 +50,35 @@ namespace OA.Repository
 
             return new PageList<OAJobLevel>(total, pageSize, pageIndex, data);
         }
+
+        /// <summary>
+        /// 按名称查询
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>实体</returns>
+        public async Task<OAJobLevel> GetByNameAsync(string name)
+        {
+            return await DbSet.FirstOrDefaultAsync(w => w.Name == name);
+        }
+
+        /// <summary>
+        /// 按名称模糊查询
+        /// </summary>
+        /// <param name="key">关键字</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAJobLevel>> GetListByNameContainsAsync(string key)
+        {
+            return await DbSet.Where(w => w.Name.Contains(key)).ToListAsync();
+        }
+
+        /// <summary>
+        /// 按id集合查询
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAJobLevel>> GetListByIdsAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(w => ids.Contains(w.Id)).ToListAsync();
+        }
     }
 }

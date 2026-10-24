@@ -1,18 +1,13 @@
 ﻿using AutoMapper;
 using OA.Application.Dtos;
 using OA.Application.Interfaces;
-using OA.Domain.AggregateRoots;
 using OA.Domain.Aggregates;
 using OA.Domain.Interfaces;
 using OA.Domain.Models;
-using OA.Domain.Repositorys;
-using OA.Domain.ValueObjects;
 using OneForAll.Core;
-using OneForAll.Core.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OA.Application
@@ -24,19 +19,21 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonFormalManager _manager;
+        private readonly IOAPersonFormalQueryService _formalQueryService;
         private readonly IOATeamMemberHistoryManager _memberHistoryManager;
-
-        private readonly IOATeamPersonContactRepository _memberRepository;
+        private readonly IOATeamMemberQueryService _memberQueryService;
         public OAPersonFormalService(
             IMapper mapper,
             IOAPersonFormalManager manager,
+            IOAPersonFormalQueryService formalQueryService,
             IOATeamMemberHistoryManager memberHistoryManager,
-            IOATeamPersonContactRepository memberRepository)
+            IOATeamMemberQueryService memberQueryService)
         {
             _mapper = mapper;
             _manager = manager;
+            _formalQueryService = formalQueryService;
             _memberHistoryManager = memberHistoryManager;
-            _memberRepository = memberRepository;
+            _memberQueryService = memberQueryService;
         }
 
         /// <summary>
@@ -57,7 +54,7 @@ namespace OA.Application
             DateTime? actualStartDate,
             DateTime? actualEndDate)
         {
-            var data = await _manager.GetListAsync(name, teamId, planStartDate, planEndDate, actualStartDate, actualEndDate);
+            var data = await _formalQueryService.GetListAsync(name, teamId, planStartDate, planEndDate, actualStartDate, actualEndDate);
             return _mapper.Map<IEnumerable<OAPersonFormalAggr>, IEnumerable<OAPersonFormalDto>>(data);
         }
 
@@ -73,7 +70,7 @@ namespace OA.Application
 
             if (errType == BaseErrType.Success)
             {
-                var members = await _memberRepository.GetListByPersonAsync(form.Id);
+                var members = await _memberQueryService.GetListByPersonAsync(form.Id);
                 var member = members.FirstOrDefault(w => w.OATeam != null);
                 if (member != null)
                 {

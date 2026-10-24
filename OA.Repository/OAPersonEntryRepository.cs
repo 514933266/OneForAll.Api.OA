@@ -98,6 +98,27 @@ namespace OA.Repository
             return await DbSet.IgnoreQueryFilters().FirstOrDefaultAsync(w => w.Id == id);
         }
 
+        /// <summary>
+        /// 按姓名和手机号精确查询
+        /// </summary>
+        /// <param name="name">姓名</param>
+        /// <param name="mobilePhone">手机号</param>
+        /// <returns>实体</returns>
+        public async Task<OAPersonEntry> GetByNameAndMobileAsync(string name, string mobilePhone)
+        {
+            return await DbSet.FirstOrDefaultAsync(w => w.Name == name && w.MobilePhone == mobilePhone);
+        }
+
+        /// <summary>
+        /// 按主键id集合查询（跟踪）
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAPersonEntry>> GetListByIdsAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(w => ids.Contains(w.Id)).ToListAsync();
+        }
+
         #endregion
     }
 }

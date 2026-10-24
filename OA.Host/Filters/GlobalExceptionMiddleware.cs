@@ -2,6 +2,7 @@
 using OA.Host.Models;
 using OA.HttpService.Interfaces;
 using OA.HttpService.Models;
+using OA.Public.Models;
 using System;
 using System.Threading.Tasks;
 

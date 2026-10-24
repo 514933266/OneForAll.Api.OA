@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoMapper;
@@ -13,15 +12,6 @@ using OA.Domain.AggregateRoots;
 using OA.Application.Interfaces;
 using OA.Domain.Models;
 using OA.Domain.Aggregates;
-using OneForAll.EFCore;
-using OA.Domain.Repositorys;
-using OneForAll.Core.Extension;
-using OneForAll.Core.Utility;
-using OA.Public.Models;
-using System.Runtime.InteropServices;
-using OA.Domain;
-using OA.Domain.ValueObjects;
-using Microsoft.AspNetCore.Http;
 
 namespace OA.Application
 {
@@ -32,28 +22,28 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAPersonEntryManager _manager;
+        private readonly IOAPersonEntryQueryService _entryQueryService;
         private readonly IOAPersonManager _personManager;
+        private readonly IOAPersonQueryService _personQueryService;
         private readonly IOATeamMemberManager _memberManager;
         private readonly IOATeamMemberHistoryManager _memberHistoryManager;
 
-        private readonly IOAPersonEntryRepository _repository;
-        private readonly IOAPersonRepository _personRepository;
         public OAPersonEntryService(
             IMapper mapper,
             IOAPersonEntryManager manager,
+            IOAPersonEntryQueryService entryQueryService,
             IOAPersonManager personManager,
+            IOAPersonQueryService personQueryService,
             IOATeamMemberManager memberManager,
-            IOATeamMemberHistoryManager memberHistoryManager,
-            IOAPersonEntryRepository repository,
-            IOAPersonRepository personRepository)
+            IOATeamMemberHistoryManager memberHistoryManager)
         {
             _mapper = mapper;
             _manager = manager;
+            _entryQueryService = entryQueryService;
             _personManager = personManager;
+            _personQueryService = personQueryService;
             _memberManager = memberManager;
             _memberHistoryManager = memberHistoryManager;
-            _repository = repository;
-            _personRepository = personRepository;
         }
 
         /// <summary>
@@ -72,18 +62,8 @@ namespace OA.Application
              DateTime? startDate,
              DateTime? endDate)
         {
-            var data = await _manager.GetListAsync(name, creatorName, mobilePhone, startDate, endDate);
-            var items = _mapper.Map<IEnumerable<OAPersonEntry>, IEnumerable<OAPersonEntryDto>>(data);
-            items.ForEach(e =>
-            {
-                var days = (DateTime.Now - e.EstimateEntryDate).TotalDays;
-                if (days >= 1)
-                {
-                    e.IsOverdue = true;
-                    e.OverdueDays = (int)days;
-                }
-            });
-            return items;
+            var data = await _entryQueryService.GetListAsync(name, creatorName, mobilePhone, startDate, endDate);
+            return _mapper.Map<IEnumerable<OAPersonEntryAggr>, IEnumerable<OAPersonEntryDto>>(data);
         }
 
         /// <summary>
@@ -95,8 +75,8 @@ namespace OA.Application
         /// <returns>分页列表</returns>
         public async Task<PageList<OAPersonEntryDto>> GetPageAsync(int pageIndex, int pageSize, string key)
         {
-            var data = await _manager.GetPageAsync(pageIndex, pageSize, key);
-            var items = _mapper.Map<IEnumerable<OAPersonEntry>, IEnumerable<OAPersonEntryDto>>(data.Items);
+            var data = await _entryQueryService.GetPageAsync(pageIndex, pageSize, key);
+            var items = _mapper.Map<IEnumerable<OAPersonEntryAggr>, IEnumerable<OAPersonEntryDto>>(data.Items);
             return new PageList<OAPersonEntryDto>(data.Total, data.PageIndex, data.PageSize, items);
         }
 
@@ -138,109 +118,18 @@ namespace OA.Application
         /// <returns>结果</returns>
         public async Task<BaseErrType> ConfirmAsync(Guid id, OAPersonEntryConfirmForm form)
         {
-            var data = await _repository.FindAsync(id);
+            var data = await _entryQueryService.GetAsync(id);
             if (data == null) return BaseErrType.DataNotFound;
             if (!data.IsSubmitEntryFile) return BaseErrType.NotAllow;
 
-            var info = _mapper.Map<OAPersonEntryConfirmForm, OAPersonForm>(form);
-            if (data.IsSubmitEntryFile && !data.ExtendInformationJson.IsNullOrWhiteSpace())
-            {
-                info.ExtendInformations = data.ExtendInformationJson.FromJson<List<OAPersonExtenInformationFieldVo>>();
-                info.IdCard = info.ExtendInformations == null ? "" : info.ExtendInformations.FirstOrDefault(w => w.Name == new OAPersonIdCardVo().Name)?.Value;
-            }
-
-            #region 默认信息填充到附加信息中
-
-            var entryDate = DateTime.Now.ToString("yyyy-MM-dd");
-            var workNumberName = new OAPersonWorkNumberVo().Name;
-            var entryDateName = new OAPersonEntryDateVo().Name;
-            var employeeStatusName = new OAPersonEmployeeStatusVo().Name;
-            var employeeTypeName = new OAPersonEmployeeTypeVo().Name;
-            var remarkName = new OAPersonRemarkVo().Name;
-
-            var workNumberItem = info.ExtendInformations.FirstOrDefault(w => w.Name == workNumberName);
-            if (workNumberItem == null)
-            {
-                info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = workNumberName, Value = info.WorkNumber });
-            }
-            else
-            {
-                workNumberItem.Value = info.WorkNumber;
-            }
-
-            var entryDateItem = info.ExtendInformations.FirstOrDefault(w => w.Name == entryDateName);
-            if (entryDateItem == null)
-            {
-                info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = entryDateName, Value = entryDate });
-            }
-            else
-            {
-                entryDateItem.Value = entryDate;
-            }
-
-            var employeeStatusItem = info.ExtendInformations.FirstOrDefault(w => w.Name == employeeStatusName);
-            if (employeeStatusItem == null)
-            {
-                info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = employeeStatusName, Value = info.EmployeeStatus });
-            }
-            else
-            {
-                employeeStatusItem.Value = info.EmployeeStatus;
-            }
-
-            var employeeTypeItem = info.ExtendInformations.FirstOrDefault(w => w.Name == employeeTypeName);
-            if (employeeTypeItem == null)
-            {
-                info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = employeeTypeName, Value = info.EmployeeType });
-            }
-            else
-            {
-                employeeTypeItem.Value = info.EmployeeType;
-            }
-
-            var remarkItem = info.ExtendInformations.FirstOrDefault(w => w.Name == remarkName);
-            if (remarkItem == null)
-            {
-                info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = remarkName, Value = info.Remark });
-            }
-            else
-            {
-                remarkItem.Value = info.Remark;
-            }
-            if (info.EmployeeStatus == "试用员工")
-            {
-                var tryDate = new OAPersonTryDateVo().Name;
-                var planEntryDateName = new OAPersonPlanEntryDateVo().Name;
-
-                var tryDateItem = info.ExtendInformations.FirstOrDefault(w => w.Name == tryDate);
-                if (tryDateItem == null)
-                {
-                    info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = tryDate, Value = "3个月" });
-                }
-                else
-                {
-                    tryDateItem.Value = tryDate;
-                }
-
-                var planEntryDateItem = info.ExtendInformations.FirstOrDefault(w => w.Name == planEntryDateName);
-                if (planEntryDateItem == null)
-                {
-                    info.ExtendInformations.Add(new OAPersonExtenInformationFieldVo() { Name = planEntryDateName, Value = entryDate.TryDateTime().AddMonths(3).ToString("yyyy-MM-dd") });
-                }
-                else
-                {
-                    planEntryDateItem.Value = entryDate.TryDateTime().AddMonths(3).ToString("yyyy-MM-dd");
-                }
-            }
-
-            #endregion
+            // 附加信息默认值等入职规则由领域层收敛
+            var info = await _manager.BuildPersonFormAsync(data, form);
 
             // 1. 创建人员档案
-            info.Id = data.Id;// 将入职资料的id传递给人员档案，直接将上传的附件同步而不需要转移文件
             var errType = await _personManager.AddAsync(info);
             if (errType == BaseErrType.Success || errType == BaseErrType.DataExist)
             {
-                var person = await _personRepository.GetAsync(w => w.Name == data.Name && w.IdCard == info.IdCard);
+                var person = await _personQueryService.GetAsync(data.Name, info.IdCard);
                 if (person != null)
                 {
                     // 2. 加入团队

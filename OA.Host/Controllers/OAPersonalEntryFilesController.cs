@@ -8,10 +8,6 @@ using OA.Domain.Models;
 using OA.Application.Dtos;
 using OA.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
-using OA.Domain.Repositorys;
-using OA.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Routing.Constraints;
 using System.IO;
 using OneForAll.Core.UploadFile;
 

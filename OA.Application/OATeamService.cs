@@ -24,18 +24,21 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOATeamManager _manager;
+        private readonly IOATeamQueryService _teamQueryService;
         private readonly IOATeamTypeManager _teamTypeManager;
         private readonly IOATeamMemberManager _teamMemberManager;
 
         public OATeamService(
             IMapper mapper,
             IOATeamManager manager,
+            IOATeamQueryService teamQueryService,
             IOATeamTypeManager teamTypeManager,
             IOATeamMemberManager teamMemberManager
             )
         {
             _mapper = mapper;
             _manager = manager;
+            _teamQueryService = teamQueryService;
             _teamTypeManager = teamTypeManager;
             _teamMemberManager = teamMemberManager;
         }
@@ -54,7 +57,7 @@ namespace OA.Application
             bool deep,
             OATeamSearchScopeEnum scope)
         {
-            var data = await _manager.GetListAsync(id, type, deep, scope);
+            var data = await _teamQueryService.GetListAsync(id, type, deep, scope);
             return _mapper.Map<IEnumerable<OATeamTreeAggr>, IEnumerable<OATeamTreeDto>>(data);
         }
 
@@ -65,7 +68,7 @@ namespace OA.Application
         /// <returns>列表</returns>
         public async Task<OATeamDto> GetAsync(Guid id)
         {
-            var data = await _manager.GetAsync(id);
+            var data = await _teamQueryService.GetAsync(id);
             return _mapper.Map<OATeam, OATeamDto>(data);
         }
 

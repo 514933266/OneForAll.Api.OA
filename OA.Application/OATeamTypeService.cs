@@ -22,13 +22,16 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOATeamTypeManager _manager;
+        private readonly IOATeamTypeQueryService _teamTypeQueryService;
 
         public OATeamTypeService(
             IMapper mapper,
-            IOATeamTypeManager manager)
+            IOATeamTypeManager manager,
+            IOATeamTypeQueryService teamTypeQueryService)
         {
             _mapper = mapper;
             _manager = manager;
+            _teamTypeQueryService = teamTypeQueryService;
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace OA.Application
         /// <returns>组织架构树</returns>
         public async Task<IEnumerable<OATeamTypeDto>> GetListAsync(string name)
         {
-            var data = await _manager.GetListAsync(name);
+            var data = await _teamTypeQueryService.GetListAsync(name);
             return _mapper.Map<IEnumerable<OATeamType>, IEnumerable<OATeamTypeDto>>(data);
         }
 

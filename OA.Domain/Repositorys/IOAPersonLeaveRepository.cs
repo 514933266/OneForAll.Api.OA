@@ -40,5 +40,19 @@ namespace OA.Domain.Repositorys
              Guid? teamId,
              DateTime? startDate,
              DateTime? endDate);
+
+        /// <summary>
+        /// 按人员id查询离职登记
+        /// </summary>
+        /// <param name="personId">人员id</param>
+        /// <returns>实体</returns>
+        Task<OAPersonLeave> GetByPersonIdAsync(Guid personId);
+
+        /// <summary>
+        /// 按主键id集合查询（跟踪）
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        Task<List<OAPersonLeave>> GetListByIdsAsync(IEnumerable<Guid> ids);
     }
 }

@@ -47,5 +47,20 @@ namespace OA.Domain.Repositorys
         /// <param name="id">实体id</param>
         /// <returns>实体</returns>
         Task<OAPersonEntry> GetIQFAsync(Guid id);
+
+        /// <summary>
+        /// 按姓名和手机号精确查询
+        /// </summary>
+        /// <param name="name">姓名</param>
+        /// <param name="mobilePhone">手机号</param>
+        /// <returns>实体</returns>
+        Task<OAPersonEntry> GetByNameAndMobileAsync(string name, string mobilePhone);
+
+        /// <summary>
+        /// 按主键id集合查询（跟踪）
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        Task<List<OAPersonEntry>> GetListByIdsAsync(IEnumerable<Guid> ids);
     }
 }

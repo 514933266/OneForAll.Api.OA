@@ -43,5 +43,19 @@ namespace OA.Domain.Interfaces
         /// <param name="id">日程id</param>
         /// <returns>结果</returns>
         Task<BaseErrType> CloseAsync(Guid id);
+
+        /// <summary>
+        /// 获取需要提醒的日程（未关闭且已到提醒时间）
+        /// </summary>
+        /// <param name="date">提醒时间</param>
+        /// <returns>日程列表</returns>
+        Task<IEnumerable<OAPersonalSchedule>> GetListNeedNotifyAsync(DateTime date);
+
+        /// <summary>
+        /// 关闭（批量）
+        /// </summary>
+        /// <param name="ids">日程id</param>
+        /// <returns>结果</returns>
+        Task<BaseErrType> CloseRangeAsync(IEnumerable<Guid> ids);
     }
 }

@@ -3,7 +3,6 @@ using OA.Application.Dtos;
 using OA.Application.Interfaces;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Interfaces;
-using OA.Domain.Repositorys;
 using OneForAll.Core;
 using System;
 using System.Collections.Generic;
@@ -19,11 +18,11 @@ namespace OA.Application
     public class OATeamMemberHistoryService : IOATeamMemberHistoryService
     {
         private readonly IMapper _mapper;
-        private readonly IOATeamMemberHistoryRepository _repository;
-        public OATeamMemberHistoryService(IMapper mapper, IOATeamMemberHistoryRepository repository)
+        private readonly IOATeamMemberHistoryQueryService _queryService;
+        public OATeamMemberHistoryService(IMapper mapper, IOATeamMemberHistoryQueryService queryService)
         {
             _mapper = mapper;
-            _repository = repository;
+            _queryService = queryService;
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace OA.Application
             DateTime? startDate,
             DateTime? endDate)
         {
-            var data = await _repository.GetPageAsync(pageIndex, pageSize, teamId, key, startDate, endDate);
+            var data = await _queryService.GetPageAsync(pageIndex, pageSize, teamId, key, startDate, endDate);
             var items = _mapper.Map<IEnumerable<OATeamMemberHistory>, IEnumerable<OATeamMemberHistoryDto>>(data.Items);
             return new PageList<OATeamMemberHistoryDto>(data.Total, data.PageIndex, data.PageSize, items);
         }

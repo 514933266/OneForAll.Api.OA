@@ -26,5 +26,12 @@ namespace OA.Domain.Repositorys
         /// <param name="name">名称</param>
         /// <returns>列表</returns>
         Task<OATeamType> GetAsync(string name);
+
+        /// <summary>
+        /// 按名称精确查询实体
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>实体</returns>
+        Task<OATeamType> GetByNameExactAsync(string name);
     }
 }

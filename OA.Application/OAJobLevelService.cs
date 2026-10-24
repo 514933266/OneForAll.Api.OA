@@ -22,12 +22,15 @@ namespace OA.Application
     {
         private readonly IMapper _mapper;
         private readonly IOAJobLevelManager _manager;
+        private readonly IOAJobLevelQueryService _queryService;
         public OAJobLevelService(
             IMapper mapper,
-            IOAJobLevelManager manager)
+            IOAJobLevelManager manager,
+            IOAJobLevelQueryService queryService)
         {
             _mapper = mapper;
             _manager = manager;
+            _queryService = queryService;
         }
 
         /// <summary>
@@ -37,12 +40,12 @@ namespace OA.Application
         /// <returns>分页列表</returns>
         public async Task<IEnumerable<OAJobLevelDto>> GetListAsync(string key)
         {
-            var data = await _manager.GetListAsync(key);
+            var data = await _queryService.GetListAsync(key);
             if (!data.Any())
             {
                 var errType = await _manager.CreateDefaultAsync();
                 if (errType == BaseErrType.Success)
-                    data = await _manager.GetListAsync(key);
+                    data = await _queryService.GetListAsync(key);
             }
             return _mapper.Map<IEnumerable<OAJobLevel>, IEnumerable<OAJobLevelDto>>(data);
         }

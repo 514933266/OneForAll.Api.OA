@@ -92,5 +92,25 @@ namespace OA.Repository
                        });
             return await sql.ToListAsync();
         }
+
+        /// <summary>
+        /// 按人员id查询离职登记
+        /// </summary>
+        /// <param name="personId">人员id</param>
+        /// <returns>实体</returns>
+        public async Task<OAPersonLeave> GetByPersonIdAsync(Guid personId)
+        {
+            return await DbSet.FirstOrDefaultAsync(w => w.OAPersonId == personId);
+        }
+
+        /// <summary>
+        /// 按主键id集合查询（跟踪）
+        /// </summary>
+        /// <param name="ids">id集合</param>
+        /// <returns>列表</returns>
+        public async Task<List<OAPersonLeave>> GetListByIdsAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(w => ids.Contains(w.Id)).ToListAsync();
+        }
     }
 }

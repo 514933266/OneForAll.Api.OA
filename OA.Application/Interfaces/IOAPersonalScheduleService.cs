@@ -43,5 +43,12 @@ namespace OA.Application.Interfaces
         /// <param name="id">日程id</param>
         /// <returns>结果</returns>
         Task<BaseErrType> CloseAsync(Guid id);
+
+        /// <summary>
+        /// 巡检待提醒日程并发送通知，返回已提醒的日程数
+        /// </summary>
+        /// <param name="wxgzhTemplateId">公众号模板id（为空则不发送公众号提醒）</param>
+        /// <returns>已提醒的日程数</returns>
+        Task<int> MonitorNotifyAsync(string wxgzhTemplateId);
     }
 }

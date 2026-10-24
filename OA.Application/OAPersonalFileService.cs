@@ -4,7 +4,6 @@ using OA.Application.Interfaces;
 using OA.Domain.AggregateRoots;
 using OA.Domain.Interfaces;
 using OA.Domain.Models;
-using OA.Domain.Repositorys;
 using OA.Domain.ValueObjects;
 using OneForAll.Core;
 using System;

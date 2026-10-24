@@ -21,8 +21,14 @@ namespace OA.Host.Profiles
             CreateMap<OAMidTeamPerson, OATeamMemberHistory>();
             CreateMap<OAPersonTeamInfoAggr, OAPersonTeamInfoDto>();
             CreateMap<OATeamMemberAggr, OAPersonTeamInfoAggr>();
-            CreateMap<OATeamMemberAggr, OAPersonBirthdayCareDto>();
-            CreateMap<OATeamMemberAggr, OAPersonCompanyCareDto>();
+            CreateMap<OATeamMemberAggr, OAPersonBirthdayCareDto>()
+                .ForMember(t => t.Teams, a => a.MapFrom(e => e.OATeam == null || e.Contact == null
+                    ? (IEnumerable<OAPersonTeamDto>)null
+                    : new List<OAPersonTeamDto>() { new OAPersonTeamDto() { IsLeader = e.Contact.IsLeader, Name = e.OATeam.Name, Type = e.OATeam.Type } }));
+            CreateMap<OATeamMemberAggr, OAPersonCompanyCareDto>()
+                .ForMember(t => t.Teams, a => a.MapFrom(e => e.OATeam == null || e.Contact == null
+                    ? (IEnumerable<OAPersonTeamDto>)null
+                    : new List<OAPersonTeamDto>() { new OAPersonTeamDto() { IsLeader = e.Contact.IsLeader, Name = e.OATeam.Name, Type = e.OATeam.Type } }));
 
             CreateMap<OATeamMemberForm, OAMidTeamPerson>()
                 .ForMember(t => t.OATeamId, a => a.MapFrom(e => e.TeamId))

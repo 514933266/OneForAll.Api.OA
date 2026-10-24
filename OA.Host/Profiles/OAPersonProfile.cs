@@ -34,6 +34,9 @@ namespace OA.Host.Profiles
 
             CreateMap<OAPersonForm, OAPerson>();
 
+            CreateMap<OAPersonStatistic, OAPersonStatisticDto>();
+            CreateMap<OAPersonStatistic, OAPersonStatisticV2Dto>();
+
             CreateMap<OATeamMemberImportForm, OAPerson>()
                 .ForMember(t => t.EntryDate, a => a.MapFrom(e => e.EntryDate.IsNullOrEmpty() ? new DateTime?() : e.EntryDate.TryDateTime()))
                 .ForMember(t => t.LeaveDate, a => a.MapFrom(e => e.EntryDate.IsNullOrEmpty() ? new DateTime?() : e.EntryDate.TryDateTime()));
